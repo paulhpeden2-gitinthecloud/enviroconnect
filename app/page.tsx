@@ -1,65 +1,131 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+const steps = [
+  {
+    number: "01",
+    title: "Browse the Directory",
+    description:
+      "Search by service type, region, or certification. Every vendor is pre-vetted.",
+  },
+  {
+    number: "02",
+    title: "Review Profiles",
+    description:
+      "See certifications, service areas, descriptions, and contact info — all in one place.",
+  },
+  {
+    number: "03",
+    title: "Connect Directly",
+    description:
+      "Reach out to qualified vendors without cold calls or middlemen.",
+  },
+];
+
+const services = [
+  "Stormwater Management",
+  "Dangerous Waste Compliance",
+  "Air Quality / Emissions",
+  "Spill Prevention (SPCC)",
+  "Refrigerant Management",
+  "Environmental Site Assessments",
+  "Asbestos / Lead Abatement",
+  "Emergency Response / HAZMAT",
+];
+
+export default function LandingPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main>
+      {/* Hero */}
+      <section className="bg-navy text-white py-24 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
+            Find Environmental Compliance Vendors You Can Trust
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+            A curated directory of pre-vetted environmental consultants and
+            service providers across the Pacific Northwest.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/directory"
+              className="bg-green hover:bg-green-light text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors"
+            >
+              Browse Vendors
+            </Link>
+            <Link
+              href="/sign-up"
+              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors border border-white/20"
+            >
+              List Your Services
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-navy text-center mb-4">
+            How It Works
+          </h2>
+          <p className="text-gray-500 text-center mb-12 max-w-xl mx-auto">
+            Skip the Google rabbit holes and cold calls. Find qualified
+            environmental vendors in minutes.
+          </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((step) => (
+              <div
+                key={step.number}
+                className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+              >
+                <div className="text-4xl font-bold text-green opacity-40 mb-4">
+                  {step.number}
+                </div>
+                <h3 className="text-xl font-semibold text-navy mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600">{step.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Services */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-navy text-center mb-12">
+            Environmental Services Covered
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {services.map((service) => (
+              <div
+                key={service}
+                className="border border-gray-200 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 text-center hover:border-green hover:text-green transition-colors"
+              >
+                {service}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Vendor CTA */}
+      <section className="bg-navy py-16 px-4 text-white text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4">Are You a Vendor?</h2>
+          <p className="text-gray-300 mb-8">
+            Get in front of qualified facility managers who are actively
+            looking for your services.
+          </p>
+          <Link
+            href="/sign-up"
+            className="inline-block bg-green hover:bg-green-light text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors"
+          >
+            Create Your Free Profile
+          </Link>
+        </div>
+      </section>
+    </main>
   );
 }
