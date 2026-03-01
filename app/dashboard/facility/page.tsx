@@ -3,6 +3,7 @@ import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { VendorCard } from "@/components/VendorCard";
+import { SkeletonCard } from "@/components/SkeletonCard";
 import Link from "next/link";
 
 export default function FacilityDashboard() {
@@ -37,7 +38,11 @@ export default function FacilityDashboard() {
       <div className="max-w-6xl mx-auto px-4 py-10">
         <h2 className="text-xl font-semibold text-navy mb-6">Saved Vendors</h2>
         {savedVendors === undefined && (
-          <p className="text-gray-500">Loading…</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
         )}
         {savedVendors?.length === 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">

@@ -33,9 +33,31 @@ export default function VendorDashboard() {
 
   if (!dbUser || profile === undefined) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">
-        Loading…
-      </div>
+      <main className="min-h-screen bg-cream">
+        <div className="bg-navy text-white py-8 px-4">
+          <div className="max-w-4xl mx-auto animate-pulse">
+            <div className="h-7 bg-white/20 rounded w-48 mb-2" />
+            <div className="h-4 bg-white/20 rounded w-64" />
+          </div>
+        </div>
+        <div className="max-w-4xl mx-auto px-4 py-10 space-y-8 animate-pulse">
+          <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 space-y-4">
+            <div className="h-5 bg-cream-dark rounded w-1/3" />
+            <div className="h-10 bg-cream-dark rounded w-full" />
+            <div className="h-10 bg-cream-dark rounded w-full" />
+            <div className="h-10 bg-cream-dark rounded w-2/3" />
+          </div>
+          <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 space-y-4">
+            <div className="h-5 bg-cream-dark rounded w-1/4" />
+            <div className="grid grid-cols-2 gap-2">
+              <div className="h-5 bg-cream-dark rounded" />
+              <div className="h-5 bg-cream-dark rounded" />
+              <div className="h-5 bg-cream-dark rounded" />
+              <div className="h-5 bg-cream-dark rounded" />
+            </div>
+          </div>
+        </div>
+      </main>
     );
   }
 

@@ -22,8 +22,10 @@ export default function DashboardPage() {
   }, [isLoaded, user, dbUser, router]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <p className="text-gray-500">Loading your dashboard…</p>
+    <div className="min-h-screen bg-cream">
+      <div className="fixed top-0 left-0 right-0 h-1 bg-green/20 overflow-hidden z-50">
+        <div className="h-full w-1/3 bg-green rounded-full animate-pulse" />
+      </div>
     </div>
   );
 }

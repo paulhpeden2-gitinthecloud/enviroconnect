@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { SkeletonProfile } from "@/components/SkeletonProfile";
 
 export default function VendorProfilePage() {
   const params = useParams();
@@ -27,7 +28,18 @@ export default function VendorProfilePage() {
   const unsaveVendor = useMutation(api.mutations.unsaveVendor);
 
   if (profile === undefined)
-    return <div className="text-center py-20 text-gray-500">Loading…</div>;
+    return (
+      <main className="min-h-screen bg-cream">
+        <div className="bg-navy text-white py-10 px-4">
+          <div className="max-w-4xl mx-auto animate-pulse">
+            <div className="h-4 bg-white/20 rounded w-32 mb-4" />
+            <div className="h-8 bg-white/20 rounded w-2/3" />
+            <div className="h-4 bg-white/20 rounded w-1/4 mt-2" />
+          </div>
+        </div>
+        <SkeletonProfile />
+      </main>
+    );
 
   if (!profile || !profile.isPublished) {
     return (

@@ -3,6 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useState } from "react";
 import { VendorCard } from "@/components/VendorCard";
+import { SkeletonCard } from "@/components/SkeletonCard";
 import { SERVICE_TYPES, SERVICE_AREAS, CERTIFICATIONS } from "@/lib/constants";
 
 export function DirectoryClient() {
@@ -104,7 +105,11 @@ export function DirectoryClient() {
 
       <div className="max-w-7xl mx-auto px-4 pb-12">
         {result === undefined && (
-          <div className="text-center text-gray-500 py-20">Loading…</div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
         )}
         {result?.profiles.length === 0 && (
           <div className="text-center text-gray-500 py-20">
