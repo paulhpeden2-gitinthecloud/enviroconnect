@@ -163,7 +163,7 @@ export default function LandingPage() {
               href="/sign-up"
               className="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors border border-white/20"
             >
-              List Your Services
+              Get Started
             </Link>
           </div>
         </ScrollReveal>

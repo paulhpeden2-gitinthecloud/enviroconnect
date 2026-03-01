@@ -39,7 +39,7 @@ export function Navbar() {
           </button>
         </SignInButton>
         <Link href="/sign-up" onClick={() => setMobileOpen(false)} className="text-sm bg-green hover:bg-green-light px-4 py-2 rounded font-medium transition-colors text-center">
-          Get Listed
+          Sign Up
         </Link>
       </div>
     )

@@ -53,7 +53,7 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 ### Working (all built, build passes cleanly)
 - Landing page: hero with bg image + overlay, How It Works, Why EnviroConnect, Services grid, Stats bar, Vendor CTA — all with scroll animations
 - Vendor directory: search/filter/pagination, skeleton loaders
-- Vendor profile pages: full detail view with save/unsave for facility managers
+- Vendor profile pages: full detail view; contact info gated behind auth; save/unsave for facility managers
 - About page: mission, founder card, contact form (mailto), FAQ accordion
 - Auth: Clerk sign-up/sign-in, onboarding (role + company), role-based dashboard redirect
 - Vendor dashboard: profile editor with checkboxes for services/certs/areas, publish toggle
@@ -66,10 +66,9 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - Pushed to GitHub: `paulhpeden2-gitinthecloud/enviroconnect`
 
 ### Not Yet Done
-- Vercel deployment (user was on the deploy screen when session ended — config verified correct)
-- Smoke test with live Convex backend (`npx convex dev` + `npm run dev` together)
+- Push Option C gated browsing changes to GitHub (4 files modified, uncommitted)
+- Smoke test full user flows (vendor sign-up + profile creation, facility manager sign-up + save vendor)
 - Production Convex deployment (currently using dev deployment)
-- Clerk allowed origins not yet updated for Vercel URL
 
 ### Known Gotchas
 - `middleware.ts` uses deprecated `middleware` file convention — Next.js 16 warns to use `proxy` instead. Not breaking, just a warning.
@@ -80,11 +79,10 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 ## Next Steps
 
 ### Immediate (when resuming)
-1. **Verify Vercel deployment succeeded** — user clicked Deploy at end of session
-2. **Add Vercel URL to Clerk allowed origins** — Clerk Dashboard → Settings
-3. **Smoke test** — run `npx convex dev` + `npm run dev` locally, test all user flows
-4. **Iterate on design** — user wants further design refinements (unspecified — ask what they want)
-5. **Add more features** — user mentioned wanting to start Phase 2 features (unspecified — ask priorities)
+1. **Commit & push** — 4 modified files (Option C gated browsing) need to be committed and pushed to GitHub → Vercel auto-deploys
+2. **Smoke test** — test full user flows on live site (vendor sign-up + profile, facility manager sign-up + save)
+3. **Iterate on design** — user wants further refinements (ask what specifically)
+4. **Phase 2 features** — ask user priorities
 
 ### Phase 2 Roadmap (from project-kickoff.md)
 1. Seed 10-20 real vendor profiles

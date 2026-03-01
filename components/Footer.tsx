@@ -12,7 +12,7 @@ const columns = [
   {
     title: "For Vendors",
     links: [
-      { label: "Get Listed", href: "/sign-up" },
+      { label: "Create Profile", href: "/sign-up" },
       { label: "Vendor Dashboard", href: "/dashboard/vendor" },
       { label: "How It Works", href: "/#how-it-works" },
     ],

@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
-import { useUser } from "@clerk/nextjs";
+import { useUser, SignInButton, SignUpButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { SkeletonProfile } from "@/components/SkeletonProfile";
 
@@ -139,7 +139,7 @@ export default function VendorProfilePage() {
         </div>
 
         <aside className="space-y-4">
-          {dbUser?.role === "facility_manager" && (
+          {dbUser?.role === "facility_manager" ? (
             <button
               onClick={handleSaveToggle}
               className={`w-full font-semibold py-2.5 rounded-lg transition-colors text-sm ${
@@ -150,51 +150,83 @@ export default function VendorProfilePage() {
             >
               {isSaved ? "Saved" : "Save Vendor"}
             </button>
-          )}
-          <div className="bg-white dark:bg-navy-light rounded-xl p-6 border border-cream-dark shadow-sm">
-            <h2 className="text-lg font-semibold text-navy mb-4">Contact</h2>
-            <div className="space-y-3 text-sm">
-              <div>
-                <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
-                  Email
-                </p>
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="text-green hover:underline"
-                >
-                  {profile.email}
-                </a>
+          ) : isLoaded && !user ? (
+            <SignUpButton mode="redirect" forceRedirectUrl="/onboarding">
+              <button className="w-full bg-navy text-white font-semibold py-2.5 rounded-lg hover:bg-navy-light transition-colors text-sm">
+                Save Vendor
+              </button>
+            </SignUpButton>
+          ) : null}
+
+          {isLoaded && user ? (
+            <div className="bg-white dark:bg-navy-light rounded-xl p-6 border border-cream-dark shadow-sm">
+              <h2 className="text-lg font-semibold text-navy mb-4">Contact</h2>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+                    Email
+                  </p>
+                  <a
+                    href={`mailto:${profile.email}`}
+                    className="text-green hover:underline"
+                  >
+                    {profile.email}
+                  </a>
+                </div>
+                {profile.phone && (
+                  <div>
+                    <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+                      Phone
+                    </p>
+                    <a
+                      href={`tel:${profile.phone}`}
+                      className="text-navy hover:underline"
+                    >
+                      {profile.phone}
+                    </a>
+                  </div>
+                )}
+                {profile.website && (
+                  <div>
+                    <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+                      Website
+                    </p>
+                    <a
+                      href={profile.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-green hover:underline truncate block"
+                    >
+                      {profile.website.replace(/^https?:\/\//, "")}
+                    </a>
+                  </div>
+                )}
               </div>
-              {profile.phone && (
-                <div>
-                  <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
-                    Phone
-                  </p>
-                  <a
-                    href={`tel:${profile.phone}`}
-                    className="text-navy hover:underline"
-                  >
-                    {profile.phone}
-                  </a>
-                </div>
-              )}
-              {profile.website && (
-                <div>
-                  <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
-                    Website
-                  </p>
-                  <a
-                    href={profile.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-green hover:underline truncate block"
-                  >
-                    {profile.website.replace(/^https?:\/\//, "")}
-                  </a>
-                </div>
-              )}
             </div>
-          </div>
+          ) : isLoaded && !user ? (
+            <div className="bg-white dark:bg-navy-light rounded-xl p-6 border border-cream-dark shadow-sm text-center">
+              <div className="mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-green mx-auto">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+              </div>
+              <h2 className="text-lg font-semibold text-navy mb-2">Contact Info</h2>
+              <p className="text-sm text-gray-500 mb-4">
+                Create a free account to view contact details and connect with this vendor.
+              </p>
+              <Link
+                href="/sign-up"
+                className="block w-full bg-green hover:bg-green-light text-white font-semibold py-2.5 rounded-lg transition-colors text-sm text-center"
+              >
+                Sign Up Free
+              </Link>
+              <SignInButton mode="modal">
+                <button className="w-full mt-2 text-sm text-navy hover:underline">
+                  Already have an account? Sign in
+                </button>
+              </SignInButton>
+            </div>
+          ) : null}
         </aside>
       </div>
     </main>
