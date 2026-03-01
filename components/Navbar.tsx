@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useUser, SignInButton, SignOutButton } from "@clerk/nextjs";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Navbar() {
   const { user, isLoaded } = useUser();
@@ -8,11 +9,15 @@ export function Navbar() {
     <header className="bg-navy text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="text-xl font-bold tracking-tight">EnviroConnect</Link>
-          <nav className="flex items-center gap-6">
+          <Link href="/" className="text-xl font-bold tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>EnviroConnect</Link>
+          <nav className="flex items-center gap-4">
             <Link href="/directory" className="text-sm font-medium text-gray-200 hover:text-white transition-colors">
               Find Vendors
             </Link>
+            <Link href="/about" className="text-sm font-medium text-gray-200 hover:text-white transition-colors">
+              About
+            </Link>
+            <ThemeToggle />
             {isLoaded && (
               user ? (
                 <div className="flex items-center gap-4">
