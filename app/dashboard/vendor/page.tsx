@@ -62,7 +62,7 @@ export default function VendorDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-cream">
       <div className="bg-navy text-white py-8 px-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between flex-wrap gap-4">
           <div>

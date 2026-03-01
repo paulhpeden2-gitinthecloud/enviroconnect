@@ -55,7 +55,7 @@ export function ProfileForm({ profile, userId }: Props) {
 
   return (
     <div className="space-y-8">
-      <section className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+      <section className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 space-y-4">
         <h2 className="text-lg font-semibold text-navy">Basic Information</h2>
         {textFields.map(({ label, key, type }) => (
           <div key={key}>
@@ -68,7 +68,7 @@ export function ProfileForm({ profile, userId }: Props) {
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, [key]: e.target.value }))
               }
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
+              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
             />
           </div>
         ))}
@@ -86,7 +86,7 @@ export function ProfileForm({ profile, userId }: Props) {
               }))
             }
             rows={5}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30 resize-none"
+            className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30 resize-none"
           />
           <p className="text-xs text-gray-400 text-right">
             {form.description.length}/2000
@@ -115,7 +115,7 @@ export function ProfileForm({ profile, userId }: Props) {
       ).map(({ title, field, options }) => (
         <section
           key={field}
-          className="bg-white rounded-xl border border-gray-200 p-6"
+          className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6"
         >
           <h2 className="text-lg font-semibold text-navy mb-4">{title}</h2>
           <div className="grid sm:grid-cols-2 gap-2">

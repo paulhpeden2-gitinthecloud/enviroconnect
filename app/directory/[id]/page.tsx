@@ -61,7 +61,7 @@ export default function VendorProfilePage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-cream">
       <div className="bg-navy text-white py-10 px-4">
         <div className="max-w-4xl mx-auto">
           <Link
@@ -128,7 +128,7 @@ export default function VendorProfilePage() {
                 {profile.serviceArea.map((a) => (
                   <span
                     key={a}
-                    className="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-full"
+                    className="bg-cream-dark/50 text-gray-700 text-sm px-3 py-1.5 rounded-full"
                   >
                     {a}
                   </span>
@@ -151,7 +151,7 @@ export default function VendorProfilePage() {
               {isSaved ? "Saved" : "Save Vendor"}
             </button>
           )}
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+          <div className="bg-white dark:bg-navy-light rounded-xl p-6 border border-cream-dark shadow-sm">
             <h2 className="text-lg font-semibold text-navy mb-4">Contact</h2>
             <div className="space-y-3 text-sm">
               <div>

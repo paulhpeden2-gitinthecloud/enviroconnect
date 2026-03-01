@@ -18,7 +18,7 @@ export default function FacilityDashboard() {
   );
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-cream">
       <div className="bg-navy text-white py-8 px-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div>
@@ -45,7 +45,7 @@ export default function FacilityDashboard() {
           </div>
         )}
         {savedVendors?.length === 0 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+          <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-10 text-center">
             <p className="text-gray-500 mb-4">
               You haven&apos;t saved any vendors yet.
             </p>

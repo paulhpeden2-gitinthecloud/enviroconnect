@@ -10,7 +10,7 @@ export function VendorCard({ profile }: { profile: Doc<"vendorProfiles"> }) {
 
   return (
     <Link href={`/directory/${profile._id}`}>
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-navy/30 transition-all cursor-pointer h-full flex flex-col">
+      <div className="bg-white dark:bg-navy-light border border-cream-dark rounded-xl p-6 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer h-full flex flex-col">
         <div className="mb-3">
           <h3 className="text-lg font-semibold text-navy truncate">
             {profile.companyName}

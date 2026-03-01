@@ -35,7 +35,7 @@ export function DirectoryClient() {
 
   return (
     <div>
-      <div className="bg-white border-b border-gray-200 py-4 px-4 mb-8">
+      <div className="bg-cream border-b border-cream-dark py-4 px-4 mb-8">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row gap-3 flex-wrap">
           <input
             type="text"
@@ -45,7 +45,7 @@ export function DirectoryClient() {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="flex-1 min-w-48 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
+            className="flex-1 min-w-48 border border-cream-dark rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
           />
           <select
             value={serviceType}
@@ -53,7 +53,7 @@ export function DirectoryClient() {
               setServiceType(e.target.value);
               setPage(1);
             }}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
+            className="border border-cream-dark rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
           >
             <option value="">All Services</option>
             {(SERVICE_TYPES as unknown as string[]).map((s) => (
@@ -68,7 +68,7 @@ export function DirectoryClient() {
               setRegion(e.target.value);
               setPage(1);
             }}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
+            className="border border-cream-dark rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
           >
             <option value="">All Regions</option>
             {(SERVICE_AREAS as unknown as string[]).map((a) => (
@@ -83,7 +83,7 @@ export function DirectoryClient() {
               setCertification(e.target.value);
               setPage(1);
             }}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
+            className="border border-cream-dark rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
           >
             <option value="">All Certifications</option>
             {(CERTIFICATIONS as unknown as string[]).map((c) => (
@@ -131,7 +131,7 @@ export function DirectoryClient() {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-4 py-2 text-sm border rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                  className="px-4 py-2 text-sm border border-cream-dark rounded-lg disabled:opacity-40 hover:bg-cream"
                 >
                   Previous
                 </button>
@@ -141,7 +141,7 @@ export function DirectoryClient() {
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-4 py-2 text-sm border rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                  className="px-4 py-2 text-sm border border-cream-dark rounded-lg disabled:opacity-40 hover:bg-cream"
                 >
                   Next
                 </button>

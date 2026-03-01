@@ -35,8 +35,8 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-md w-full">
+    <main className="min-h-screen bg-cream flex items-center justify-center py-12 px-4">
+      <div className="bg-white dark:bg-navy-light rounded-xl shadow-sm border border-cream-dark p-8 max-w-md w-full">
         <h1 className="text-2xl font-bold text-navy mb-2">
           Welcome to EnviroConnect
         </h1>
@@ -68,7 +68,7 @@ export default function OnboardingPage() {
                   className={`p-4 border-2 rounded-lg text-left transition-all ${
                     role === opt.value
                       ? "border-navy bg-navy/5"
-                      : "border-gray-200 hover:border-gray-300"
+                      : "border-cream-dark hover:border-gray-300"
                   }`}
                 >
                   <p className="font-semibold text-navy text-sm">{opt.label}</p>
@@ -87,7 +87,7 @@ export default function OnboardingPage() {
               onChange={(e) => setCompany(e.target.value)}
               placeholder="Your company name"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
+              className="w-full border border-cream-dark rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy/30"
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
