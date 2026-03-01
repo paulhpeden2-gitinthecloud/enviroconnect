@@ -1,8 +1,39 @@
 @import "tailwindcss";
 
+/* === Fonts === */
+@font-face {
+  font-family: "Science Gothic";
+  src: url("/fonts/ScienceGothic-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Science Gothic";
+  src: url("/fonts/ScienceGothic-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Science Gothic";
+  src: url("/fonts/ScienceGothic-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Electrolize";
+  src: url("/fonts/Electrolize-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === Light mode (default) === */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F8F6F1;
+  --foreground: #1B2A4A;
 }
 
 @theme inline {
@@ -12,17 +43,30 @@
   --color-navy-light: #243759;
   --color-green: #2D5F2D;
   --color-green-light: #3a7a3a;
+  --color-cream: #F8F6F1;
+  --color-cream-dark: #EDE9E0;
+  --font-heading: "Science Gothic", system-ui, sans-serif;
+  --font-body: "Electrolize", system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* === Dark mode === */
+html.dark {
+  --background: #1A1A1A;
+  --foreground: #E8E8E8;
+  --color-navy: #0F1A2E;
+  --color-navy-light: #1B2A4A;
+  --color-green: #4A9E4A;
+  --color-green-light: #5CB85C;
+  --color-cream: #1A1A1A;
+  --color-cream-dark: #2A2A2A;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
 }
