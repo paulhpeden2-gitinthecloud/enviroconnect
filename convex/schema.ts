@@ -40,4 +40,51 @@ export default defineSchema({
       "facilityManagerId",
       "vendorProfileId",
     ]),
+
+  rfqs: defineTable({
+    facilityManagerId: v.id("users"),
+    title: v.string(),
+    description: v.string(),
+    services: v.array(v.string()),
+    serviceArea: v.string(),
+    budgetRange: v.optional(v.string()),
+    deadline: v.number(),
+    timeline: v.string(),
+    requirements: v.optional(v.string()),
+    invitedVendors: v.optional(v.array(v.id("vendorProfiles"))),
+    status: v.union(v.literal("open"), v.literal("closed"), v.literal("awarded")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_facilityManagerId", ["facilityManagerId"])
+    .index("by_status", ["status"]),
+
+  rfqResponses: defineTable({
+    rfqId: v.id("rfqs"),
+    vendorProfileId: v.id("vendorProfiles"),
+    proposalText: v.string(),
+    estimatedCost: v.optional(v.string()),
+    estimatedTimeline: v.optional(v.string()),
+    status: v.union(v.literal("submitted"), v.literal("accepted"), v.literal("declined")),
+    createdAt: v.number(),
+  })
+    .index("by_rfqId", ["rfqId"])
+    .index("by_vendorProfileId", ["vendorProfileId"])
+    .index("by_rfqId_vendorProfileId", ["rfqId", "vendorProfileId"]),
+
+  notifications: defineTable({
+    userId: v.id("users"),
+    type: v.union(
+      v.literal("rfq_match"),
+      v.literal("rfq_invite"),
+      v.literal("rfq_response"),
+      v.literal("rfq_accepted")
+    ),
+    rfqId: v.id("rfqs"),
+    message: v.string(),
+    isRead: v.boolean(),
+    createdAt: v.number(),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_userId_isRead", ["userId", "isRead"]),
 });
