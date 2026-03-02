@@ -10,6 +10,8 @@
 
 import type * as http from "../http.js";
 import type * as mutations from "../mutations.js";
+import type * as rfqMutations from "../rfqMutations.js";
+import type * as rfqs from "../rfqs.js";
 import type * as users from "../users.js";
 import type * as vendors from "../vendors.js";
 
@@ -22,6 +24,8 @@ import type {
 declare const fullApi: ApiFromModules<{
   http: typeof http;
   mutations: typeof mutations;
+  rfqMutations: typeof rfqMutations;
+  rfqs: typeof rfqs;
   users: typeof users;
   vendors: typeof vendors;
 }>;
