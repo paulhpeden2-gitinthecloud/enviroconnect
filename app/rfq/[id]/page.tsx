@@ -6,6 +6,8 @@ import { useUser } from "@clerk/nextjs";
 import { Id } from "@/convex/_generated/dataModel";
 import Link from "next/link";
 import { useState } from "react";
+import { PdfUpload } from "@/components/PdfUpload";
+import type { UploadedFile } from "@/components/PdfUpload";
 
 function timelineColor(timeline: string) {
   if (timeline.includes("Urgent")) return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300";
@@ -44,6 +46,7 @@ export default function RfqDetailPage() {
   const acceptProposal = useMutation(api.rfqMutations.acceptProposal);
   const declineProposal = useMutation(api.rfqMutations.declineProposal);
   const closeRfq = useMutation(api.rfqMutations.closeRfq);
+  const generateUploadUrl = useMutation(api.rfqMutations.generateUploadUrl);
 
   const [proposalForm, setProposalForm] = useState({
     proposalText: "",
@@ -53,26 +56,50 @@ export default function RfqDetailPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [uploadFiles, setUploadFiles] = useState<UploadedFile[]>([]);
 
   const isOwner = dbUser && rfq && rfq.facilityManagerId === dbUser._id;
   const isVendor = dbUser?.role === "vendor";
 
   const handleSubmitProposal = async () => {
     if (!vendorProfile) return;
-    if (!proposalForm.proposalText.trim()) { setError("Proposal text is required"); return; }
+    if (!proposalForm.proposalText.trim()) {
+      setError("Message is required");
+      return;
+    }
 
     setSubmitting(true);
     setError("");
     try {
+      // Upload all files first
+      const attachments: { storageId: string; fileName: string; fileSize: number }[] = [];
+      for (const uf of uploadFiles) {
+        const uploadUrl = await generateUploadUrl();
+        const result = await fetch(uploadUrl, {
+          method: "POST",
+          headers: { "Content-Type": uf.file.type },
+          body: uf.file,
+        });
+        if (!result.ok) throw new Error(`Failed to upload ${uf.file.name}`);
+        const { storageId } = await result.json();
+        attachments.push({
+          storageId,
+          fileName: uf.file.name,
+          fileSize: uf.file.size,
+        });
+      }
+
       await submitProposal({
         rfqId,
         vendorProfileId: vendorProfile._id,
         proposalText: proposalForm.proposalText.trim(),
         estimatedCost: proposalForm.estimatedCost.trim() || undefined,
         estimatedTimeline: proposalForm.estimatedTimeline.trim() || undefined,
+        attachments: attachments.length > 0 ? attachments : undefined,
       });
       setSuccess("Proposal submitted!");
       setProposalForm({ proposalText: "", estimatedCost: "", estimatedTimeline: "" });
+      setUploadFiles([]);
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit proposal");
@@ -192,20 +219,21 @@ export default function RfqDetailPage() {
             </div>
 
             {isVendor && vendorProfile && rfq.status === "open" && !hasResponded && (
-              <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-                <h2 className="text-lg font-semibold text-navy mb-4">Submit a Proposal</h2>
-                <div className="space-y-4">
+              <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-8">
+                <h2 className="text-lg font-semibold text-navy dark:text-cream mb-5">Submit a Proposal</h2>
+                <div className="space-y-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Proposal *</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message *</label>
                     <textarea
                       value={proposalForm.proposalText}
                       onChange={(e) => setProposalForm((prev) => ({ ...prev, proposalText: e.target.value }))}
-                      placeholder="Describe your approach, relevant experience, and what sets you apart..."
-                      rows={5}
+                      placeholder="Brief cover note with your proposal..."
+                      rows={4}
                       maxLength={2000}
                       className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-green/50 resize-vertical"
                     />
                   </div>
+                  <PdfUpload files={uploadFiles} onFilesChange={setUploadFiles} />
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estimated Cost</label>
@@ -235,7 +263,7 @@ export default function RfqDetailPage() {
                     disabled={submitting}
                     className="bg-green hover:bg-green-light text-white font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50"
                   >
-                    {submitting ? "Submitting..." : "Submit Proposal"}
+                    {submitting ? "Uploading & Submitting..." : "Submit Proposal"}
                   </button>
                 </div>
               </div>
