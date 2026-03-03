@@ -158,6 +158,21 @@ export default function VendorProfilePage() {
             </SignUpButton>
           ) : null}
 
+          {dbUser?.role === "facility_manager" ? (
+            <Link
+              href={`/rfq/new?invite=${profile._id}`}
+              className="block w-full text-center bg-navy hover:bg-navy-light text-white font-semibold py-2.5 rounded-lg transition-colors text-sm"
+            >
+              Request Quote
+            </Link>
+          ) : isLoaded && !user ? (
+            <SignUpButton mode="redirect" forceRedirectUrl="/onboarding">
+              <button className="w-full bg-navy text-white font-semibold py-2.5 rounded-lg hover:bg-navy-light transition-colors text-sm">
+                Request Quote
+              </button>
+            </SignUpButton>
+          ) : null}
+
           {isLoaded && user ? (
             <div className="bg-white dark:bg-navy-light rounded-xl p-6 border border-cream-dark shadow-sm">
               <h2 className="text-lg font-semibold text-navy mb-4">Contact</h2>

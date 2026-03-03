@@ -1,13 +1,34 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SERVICE_TYPES, SERVICE_AREAS, BUDGET_RANGES, TIMELINE_OPTIONS } from "@/lib/constants";
 import Link from "next/link";
 
 export default function CreateRfqPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-cream">
+          <div className="max-w-3xl mx-auto px-4 py-10 animate-pulse">
+            <div className="h-8 bg-cream-dark rounded w-48 mb-8" />
+            <div className="space-y-6">
+              <div className="h-10 bg-cream-dark rounded" />
+              <div className="h-32 bg-cream-dark rounded" />
+              <div className="h-10 bg-cream-dark rounded w-1/2" />
+            </div>
+          </div>
+        </main>
+      }
+    >
+      <CreateRfqContent />
+    </Suspense>
+  );
+}
+
+function CreateRfqContent() {
   const router = useRouter();
   const { user, isLoaded } = useUser();
   const dbUser = useQuery(
@@ -32,6 +53,15 @@ export default function CreateRfqPage() {
   const [vendorSearch, setVendorSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  const searchParams = useSearchParams();
+  const inviteParam = searchParams.get("invite");
+
+  useEffect(() => {
+    if (inviteParam && !invitedVendorIds.includes(inviteParam)) {
+      setInvitedVendorIds([inviteParam]);
+    }
+  }, [inviteParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleService = (service: string) => {
     setForm((prev) => ({
