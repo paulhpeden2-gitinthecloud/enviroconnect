@@ -74,7 +74,7 @@ export default function RfqDetailPage() {
     setError("");
     try {
       // Upload all files first
-      const attachments: { storageId: string; fileName: string; fileSize: number }[] = [];
+      const attachments: { storageId: Id<"_storage">; fileName: string; fileSize: number }[] = [];
       for (const uf of uploadFiles) {
         const uploadUrl = await generateUploadUrl();
         const result = await fetch(uploadUrl, {
