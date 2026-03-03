@@ -81,6 +81,11 @@ export const submitProposal = mutation({
     proposalText: v.string(),
     estimatedCost: v.optional(v.string()),
     estimatedTimeline: v.optional(v.string()),
+    attachments: v.optional(v.array(v.object({
+      storageId: v.id("_storage"),
+      fileName: v.string(),
+      fileSize: v.number(),
+    }))),
   },
   handler: async (ctx, args) => {
     const rfq = await ctx.db.get(args.rfqId);
@@ -99,7 +104,12 @@ export const submitProposal = mutation({
 
     const now = Date.now();
     await ctx.db.insert("rfqResponses", {
-      ...args,
+      rfqId: args.rfqId,
+      vendorProfileId: args.vendorProfileId,
+      proposalText: args.proposalText,
+      estimatedCost: args.estimatedCost,
+      estimatedTimeline: args.estimatedTimeline,
+      attachments: args.attachments,
       status: "submitted",
       createdAt: now,
     });
@@ -192,5 +202,12 @@ export const markAllNotificationsRead = mutation({
     for (const n of unread) {
       await ctx.db.patch(n._id, { isRead: true });
     }
+  },
+});
+
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.storage.generateUploadUrl();
   },
 });
