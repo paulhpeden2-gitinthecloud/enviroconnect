@@ -1,17 +1,24 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { useUser, SignInButton, SignOutButton } from "@clerk/nextjs";
 import { ThemeToggle } from "./ThemeToggle";
+import { NotificationBell } from "./NotificationBell";
 
 export function Navbar() {
   const { user, isLoaded } = useUser();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const dbUser = useQuery(api.users.getUserByClerkId, isLoaded && user ? { clerkId: user.id } : "skip");
 
   const navLinks = (
     <>
       <Link href="/directory" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
         Find Vendors
+      </Link>
+      <Link href="/rfq" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
+        RFQs
       </Link>
       <Link href="/about" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
         About
@@ -25,6 +32,11 @@ export function Navbar() {
         <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
           Dashboard
         </Link>
+        {dbUser && (
+          <div className="hidden md:block">
+            <NotificationBell userId={dbUser._id} />
+          </div>
+        )}
         <SignOutButton>
           <button className="text-sm bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition-colors text-left md:text-center">
             Sign Out
