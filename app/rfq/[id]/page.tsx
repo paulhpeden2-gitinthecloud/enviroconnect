@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { PdfUpload } from "@/components/PdfUpload";
 import type { UploadedFile } from "@/components/PdfUpload";
+import { PdfPreviewModal } from "@/components/PdfPreviewModal";
 
 function timelineColor(timeline: string) {
   if (timeline.includes("Urgent")) return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300";
@@ -57,6 +58,7 @@ export default function RfqDetailPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [uploadFiles, setUploadFiles] = useState<UploadedFile[]>([]);
+  const [previewFile, setPreviewFile] = useState<{ url: string; fileName: string } | null>(null);
 
   const isOwner = dbUser && rfq && rfq.facilityManagerId === dbUser._id;
   const isVendor = dbUser?.role === "vendor";
@@ -318,6 +320,26 @@ export default function RfqDetailPage() {
                           {r.estimatedCost && <span>Cost: <strong className="text-navy dark:text-white">{r.estimatedCost}</strong></span>}
                           {r.estimatedTimeline && <span>Timeline: <strong className="text-navy dark:text-white">{r.estimatedTimeline}</strong></span>}
                         </div>
+                        {r.attachmentsWithUrls && r.attachmentsWithUrls.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {r.attachmentsWithUrls.map((a, i) => (
+                              <button
+                                key={i}
+                                onClick={() =>
+                                  a.url && setPreviewFile({ url: a.url, fileName: a.fileName })
+                                }
+                                className="flex items-center gap-2 bg-cream dark:bg-navy rounded-lg px-3 py-2 text-sm border border-cream-dark dark:border-navy-light hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200"
+                              >
+                                <svg className="w-4 h-4 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H4zm7 1.5L16.5 9H12a1 1 0 01-1-1V3.5zM7 11h6a1 1 0 110 2H7a1 1 0 110-2zm0 3h4a1 1 0 110 2H7a1 1 0 110-2z" />
+                                </svg>
+                                <span className="text-navy dark:text-cream text-xs font-medium truncate max-w-[150px]">
+                                  {a.fileName}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
                         {rfq.status === "open" && r.status === "submitted" && (
                           <div className="flex gap-2">
                             <button
@@ -382,6 +404,13 @@ export default function RfqDetailPage() {
           </aside>
         </div>
       </div>
+      {previewFile && (
+        <PdfPreviewModal
+          url={previewFile.url}
+          fileName={previewFile.fileName}
+          onClose={() => setPreviewFile(null)}
+        />
+      )}
     </main>
   );
 }
