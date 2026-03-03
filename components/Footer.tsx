@@ -14,6 +14,7 @@ const columns = [
     links: [
       { label: "Create Profile", href: "/sign-up" },
       { label: "Vendor Dashboard", href: "/dashboard/vendor" },
+      { label: "RFQ Board", href: "/rfq" },
       { label: "How It Works", href: "/#how-it-works" },
     ],
   },

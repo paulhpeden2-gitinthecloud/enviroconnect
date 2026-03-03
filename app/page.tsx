@@ -20,6 +20,12 @@ const steps = [
     description:
       "Reach out to qualified vendors without cold calls or middlemen.",
   },
+  {
+    number: "04",
+    title: "Get Proposals",
+    description:
+      "Post a Request for Quote and receive proposals from qualified vendors.",
+  },
 ];
 
 const features = [
@@ -112,6 +118,27 @@ const features = [
       </svg>
     ),
   },
+  {
+    title: "RFQ System",
+    description:
+      "Post Requests for Quote to get competitive proposals from vetted vendors — fast.",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-8 h-8 text-green mb-4"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+        />
+      </svg>
+    ),
+  },
 ];
 
 const services = [
@@ -182,7 +209,7 @@ export default function LandingPage() {
             </p>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
               <ScrollReveal key={step.number} delay={index * 0.1}>
                 <div className="bg-white dark:bg-navy-light rounded-xl p-8 border border-cream-dark hover:-translate-y-1 hover:shadow-md transition-all duration-200 relative flex gap-4">
@@ -220,7 +247,7 @@ export default function LandingPage() {
             </p>
           </ScrollReveal>
 
-          <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {features.map((feature, index) => (
               <ScrollReveal key={feature.title} delay={index * 0.1}>
                 <div className="bg-white dark:bg-navy-light rounded-xl p-8 border border-cream-dark hover:-translate-y-1 hover:shadow-md transition-all duration-200">
