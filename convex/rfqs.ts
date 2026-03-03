@@ -72,7 +72,15 @@ export const getRfqResponses = query({
     const withProfiles = await Promise.all(
       responses.map(async (r) => {
         const profile = await ctx.db.get(r.vendorProfileId);
-        return { ...r, vendorProfile: profile };
+        const attachmentsWithUrls = r.attachments
+          ? await Promise.all(
+              r.attachments.map(async (a) => ({
+                ...a,
+                url: await ctx.storage.getUrl(a.storageId),
+              }))
+            )
+          : undefined;
+        return { ...r, vendorProfile: profile, attachmentsWithUrls };
       })
     );
     return withProfiles;
@@ -130,7 +138,11 @@ export const getVendorResponses = query({
     const withRfqs = await Promise.all(
       responses.map(async (r) => {
         const rfq = await ctx.db.get(r.rfqId);
-        return { ...r, rfq };
+        return {
+          ...r,
+          rfq,
+          attachmentCount: r.attachments?.length ?? 0,
+        };
       })
     );
     return withRfqs.sort((a, b) => b.createdAt - a.createdAt);
