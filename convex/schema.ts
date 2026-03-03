@@ -65,6 +65,11 @@ export default defineSchema({
     proposalText: v.string(),
     estimatedCost: v.optional(v.string()),
     estimatedTimeline: v.optional(v.string()),
+    attachments: v.optional(v.array(v.object({
+      storageId: v.id("_storage"),
+      fileName: v.string(),
+      fileSize: v.number(),
+    }))),
     status: v.union(v.literal("submitted"), v.literal("accepted"), v.literal("declined")),
     createdAt: v.number(),
   })
