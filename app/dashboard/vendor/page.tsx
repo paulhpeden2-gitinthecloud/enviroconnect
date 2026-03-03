@@ -20,6 +20,10 @@ export default function VendorDashboard() {
     api.rfqs.getMatchedRfqs,
     profile ? { vendorProfileId: profile._id } : "skip"
   );
+  const myProposals = useQuery(
+    api.rfqs.getVendorResponses,
+    profile ? { vendorProfileId: profile._id } : "skip"
+  );
   const createProfile = useMutation(api.mutations.createVendorProfile);
   const togglePublish = useMutation(api.mutations.togglePublishProfile);
 
@@ -197,6 +201,106 @@ export default function VendorDashboard() {
                       </div>
                       <p className="text-xs text-gray-400 dark:text-gray-500 mt-1.5 line-clamp-1">
                         {rfq.description}
+                      </p>
+                    </div>
+                    <span className="text-xs text-green font-medium shrink-0 mt-1">
+                      View &rarr;
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* My Proposals Section */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-navy dark:text-cream">
+              My Proposals
+            </h2>
+          </div>
+
+          {myProposals === undefined && (
+            <div className="space-y-3 animate-pulse">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 space-y-2"
+                >
+                  <div className="h-4 bg-cream-dark rounded w-2/3" />
+                  <div className="h-3 bg-cream-dark rounded w-1/3" />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {myProposals?.length === 0 && (
+            <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-10 text-center">
+              <p className="text-gray-500 dark:text-gray-400 mb-2">
+                You haven&apos;t submitted any proposals yet.
+              </p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
+                Browse RFQs and submit proposals to track them here.
+              </p>
+              <Link
+                href="/rfq"
+                className="text-navy dark:text-cream font-medium underline hover:no-underline text-sm"
+              >
+                Browse the RFQ board
+              </Link>
+            </div>
+          )}
+
+          {myProposals && myProposals.length > 0 && (
+            <div className="space-y-3">
+              {myProposals.map((proposal) => (
+                <Link
+                  key={proposal._id}
+                  href={`/rfq/${proposal.rfqId}`}
+                  className="block bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap mb-2">
+                        <h3 className="text-sm font-semibold text-navy dark:text-cream truncate">
+                          {proposal.rfq?.title ?? "Unknown RFQ"}
+                        </h3>
+                        <span
+                          className={`text-xs font-bold px-2.5 py-0.5 rounded-full text-white ${
+                            proposal.status === "accepted"
+                              ? "bg-green"
+                              : proposal.status === "declined"
+                                ? "bg-red-400"
+                                : "bg-navy dark:bg-white/20"
+                          }`}
+                        >
+                          {proposal.status.charAt(0).toUpperCase() + proposal.status.slice(1)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-1.5">
+                        <span>{new Date(proposal.createdAt).toLocaleDateString()}</span>
+                        {proposal.attachmentCount > 0 && (
+                          <>
+                            <span className="w-1 h-1 rounded-full bg-gray-300" />
+                            <span>{proposal.attachmentCount} attachment{proposal.attachmentCount !== 1 ? "s" : ""}</span>
+                          </>
+                        )}
+                        {proposal.estimatedCost && (
+                          <>
+                            <span className="w-1 h-1 rounded-full bg-gray-300" />
+                            <span>{proposal.estimatedCost}</span>
+                          </>
+                        )}
+                        {proposal.estimatedTimeline && (
+                          <>
+                            <span className="w-1 h-1 rounded-full bg-gray-300" />
+                            <span>{proposal.estimatedTimeline}</span>
+                          </>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 line-clamp-1">
+                        {proposal.proposalText}
                       </p>
                     </div>
                     <span className="text-xs text-green font-medium shrink-0 mt-1">
