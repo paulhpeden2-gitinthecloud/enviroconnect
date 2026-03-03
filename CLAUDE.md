@@ -8,7 +8,7 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - Backend/Database: Convex (real-time, cloud-hosted)
 - Auth: Clerk (roles: "vendor" | "facility_manager", JWT integration with Convex)
 - Animations: framer-motion (scroll reveals, FAQ accordion)
-- Deployment: Vercel (in progress — first deploy pending)
+- Deployment: Vercel (live at https://enviroconnect.vercel.app)
 
 **Key Dependencies:** `@clerk/nextjs`, `convex`, `framer-motion`, `svix` (webhook verification)
 
@@ -51,43 +51,36 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 ## Current Status
 
 ### Working (all built, build passes cleanly)
-- Landing page: hero with bg image + overlay, How It Works, Why EnviroConnect, Services grid, Stats bar, Vendor CTA — all with scroll animations
+- Landing page: hero, How It Works (4 steps incl RFQ), Why EnviroConnect (5 features), Services grid, Stats bar, CTAs
 - Vendor directory: search/filter/pagination, skeleton loaders
-- Vendor profile pages: full detail view; contact info gated behind auth; save/unsave for facility managers
+- Vendor profile pages: contact info gated behind auth; save/unsave; Request Quote button
 - About page: mission, founder card, contact form (mailto), FAQ accordion
 - Auth: Clerk sign-up/sign-in, onboarding (role + company), role-based dashboard redirect
-- Vendor dashboard: profile editor with checkboxes for services/certs/areas, publish toggle
-- Facility manager dashboard: saved vendors grid
-- Dark mode toggle: sun/moon in navbar, localStorage persistence
-- Footer: 4-column layout on all pages (Directory, For Vendors, Company, Legal)
-- Mobile: hamburger menu with slide-down panel
-- Skeleton loaders on all loading states
-- Cream palette + dark mode classes on all pages
-- Pushed to GitHub: `paulhpeden2-gitinthecloud/enviroconnect`
-
-### Not Yet Done
-- Push Option C gated browsing changes to GitHub (4 files modified, uncommitted)
-- Smoke test full user flows (vendor sign-up + profile creation, facility manager sign-up + save vendor)
-- Production Convex deployment (currently using dev deployment)
+- Vendor dashboard: profile editor, publish toggle, RFQ Matches section
+- Facility manager dashboard: saved vendors, My RFQs section
+- **RFQ system**: board (/rfq), create form (/rfq/new), detail page (/rfq/[id]), proposal submission/review, notifications
+- **Notifications**: bell icon in navbar, unread count badge, dropdown with mark-read
+- Dark mode, mobile hamburger, skeleton loaders, cream palette on all pages
+- Deployed: GitHub + Vercel + Convex (dev + prod)
 
 ### Known Gotchas
 - `middleware.ts` uses deprecated `middleware` file convention — Next.js 16 warns to use `proxy` instead. Not breaking, just a warning.
-- Homebrew has permissions issue on this machine (`/opt/homebrew` not writable). Fix with `sudo chown -R blueenvironmental /opt/homebrew`.
-- GitHub push requires personal access token (no `gh` CLI installed). Token should NOT be stored — generate fresh each time.
+- **Convex deploy is separate from Vercel deploy.** After adding/changing Convex functions, run `npx convex dev --once` (dev) or `npx convex deploy --cmd "npm run build" --yes` (prod).
+- Vercel currently uses the **dev** Convex deployment (`compassionate-schnauzer-376`). Prod is `incredible-pigeon-872`.
 - `CONVEX_DEPLOYMENT` env var is for local dev only — do NOT add to Vercel.
+- GitHub push via HTTPS works (credentials cached).
 
 ## Next Steps
 
 ### Immediate (when resuming)
-1. **Commit & push** — 4 modified files (Option C gated browsing) need to be committed and pushed to GitHub → Vercel auto-deploys
-2. **Smoke test** — test full user flows on live site (vendor sign-up + profile, facility manager sign-up + save)
-3. **Iterate on design** — user wants further refinements (ask what specifically)
-4. **Phase 2 features** — ask user priorities
+1. **Smoke test RFQ** — create RFQ as FM, respond as vendor, accept proposal
+2. **Iterate on design** — user researching inspiration (Dribbble, Behance, etc.)
+3. **Next Phase 2 feature** — seed vendor data, then trust networks
 
-### Phase 2 Roadmap (from project-kickoff.md)
-1. Seed 10-20 real vendor profiles
-2. Trust networks (vendor-to-vendor referrals)
-3. RFQ system (facilities post requests, vendors respond)
+### Phase 2 Roadmap
+1. ~~RFQ system~~ (DONE)
+2. Seed 10-20 real vendor profiles
+3. Trust networks (vendor-to-vendor referrals)
 4. In-app messaging / DMs
 5. Meeting scheduler with calendar integration
 6. Payments (Polar or Stripe)
@@ -101,12 +94,13 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - `app/about/page.tsx` — About page (mission, team, contact form, FAQ accordion)
 - `app/layout.tsx` — Root layout with Navbar + Footer + Providers
 - `app/providers.tsx` — ThemeProvider → ClerkProvider → ConvexProviderWithClerk
-- `components/Navbar.tsx` — Responsive nav with hamburger menu, dark mode toggle, auth state
+- `components/Navbar.tsx` — Nav with hamburger menu, dark mode toggle, auth, notification bell, RFQs link
+- `components/NotificationBell.tsx` — Notification dropdown with unread count
 - `components/Footer.tsx` — 4-column footer shared across all pages
-- `components/ScrollReveal.tsx` — framer-motion scroll animation wrapper
-- `convex/schema.ts` — Database schema (users, vendorProfiles, savedVendors)
+- `convex/schema.ts` — Database schema (users, vendorProfiles, savedVendors, rfqs, rfqResponses, notifications)
+- `convex/rfqs.ts` — RFQ queries (getRfqs, getMyRfqs, getMatchedRfqs, getRfqResponses, notifications)
+- `convex/rfqMutations.ts` — RFQ mutations (createRfq, submitProposal, acceptProposal, closeRfq, notifications)
 - `convex/http.ts` — Clerk webhook handler with svix verification
-- `docs/plans/2026-02-28-design-refinements.md` — Implementation plan for the design work just completed
 
 ## Auth Flow
 1. Sign up via Clerk → `/onboarding` (select role + enter company → writes to Convex `users` table)
@@ -117,8 +111,10 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - Terminal 1: `npx convex dev` (keep running — watches and deploys Convex functions on save)
 - Terminal 2: `npm run dev` (Next.js dev server on localhost:3000)
 - Build: `npm run build` (production build, currently passes clean)
+- Convex deploy (dev): `npx convex dev --once`
+- Convex deploy (prod): `npx convex deploy --cmd "npm run build" --yes`
 
 ## GitHub
 - Repo: `https://github.com/paulhpeden2-gitinthecloud/enviroconnect`
 - Branch: `main` (all work on main, no feature branches yet)
-- 16 commits as of end of session
+- 28 commits as of end of RFQ session
