@@ -60,32 +60,37 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - Facility manager dashboard: saved vendors, My RFQs section
 - **RFQ system**: board (/rfq), create form (/rfq/new), detail page (/rfq/[id]), proposal submission/review, notifications
 - **Notifications**: bell icon in navbar, unread count badge, dropdown with mark-read
+- **Proposal attachments**: PDF upload (up to 5 files, drag-and-drop), in-browser preview modal, download
+- **Vendor dashboard "My Proposals"**: tracks proposal status (submitted/accepted/declined) with bold status badges
+- Convex file storage for PDF attachments (`generateUploadUrl` mutation + `ctx.storage.getUrl()` in queries)
 - Dark mode, mobile hamburger, skeleton loaders, cream palette on all pages
-- Deployed: GitHub + Vercel + Convex (dev + prod)
+- Deployed: GitHub + Vercel + Convex (auto-deploy via `CONVEX_DEPLOY_KEY`)
 
 ### Known Gotchas
 - `middleware.ts` uses deprecated `middleware` file convention — Next.js 16 warns to use `proxy` instead. Not breaking, just a warning.
-- **Convex deploy is separate from Vercel deploy.** After adding/changing Convex functions, run `npx convex dev --once` (dev) or `npx convex deploy --cmd "npm run build" --yes` (prod).
-- Vercel currently uses the **dev** Convex deployment (`compassionate-schnauzer-376`). Prod is `incredible-pigeon-872`.
+- **Convex auto-deploy is now configured.** Vercel build command: `npx convex deploy --cmd "npm run build" --yes`. Both Convex functions and Next.js build deploy together on push.
 - `CONVEX_DEPLOYMENT` env var is for local dev only — do NOT add to Vercel.
 - GitHub push via HTTPS works (credentials cached).
+- Convex upload response returns `storageId` as `string` — must type as `Id<"_storage">` when passing to mutations.
 
 ## Next Steps
 
 ### Immediate (when resuming)
-1. **Smoke test RFQ** — create RFQ as FM, respond as vendor, accept proposal
-2. **Iterate on design** — user researching inspiration (Dribbble, Behance, etc.)
+1. **Full UI redesign** — iterate in Figma (MCP added, needs session restart), then implement
+2. **Smoke test proposal attachments** on live site
 3. **Next Phase 2 feature** — seed vendor data, then trust networks
 
 ### Phase 2 Roadmap
 1. ~~RFQ system~~ (DONE)
-2. Seed 10-20 real vendor profiles
-3. Trust networks (vendor-to-vendor referrals)
-4. In-app messaging / DMs
-5. Meeting scheduler with calendar integration
-6. Payments (Polar or Stripe)
-7. Email-to-referral
-8. Reviews & ratings
+2. ~~Proposal attachments~~ (DONE)
+3. **Full UI redesign** (IN PROGRESS — Figma iteration)
+4. Seed 10-20 real vendor profiles
+5. Trust networks (vendor-to-vendor referrals)
+6. In-app messaging / DMs
+7. Meeting scheduler with calendar integration
+8. Payments (Polar or Stripe)
+9. Email-to-referral
+10. Reviews & ratings
 
 ## Key Files
 
