@@ -21,6 +21,12 @@ export function DirectoryClient() {
     page,
   });
 
+  const profileIds = result?.profiles?.map((p) => p._id) ?? [];
+  const endorsementCounts = useQuery(
+    api.endorsements.getEndorsementCountsBatch,
+    profileIds.length > 0 ? { vendorProfileIds: profileIds } : "skip"
+  );
+
   const totalPages = result ? Math.ceil(result.total / result.pageSize) : 1;
 
   const resetFilters = () => {
@@ -123,7 +129,7 @@ export function DirectoryClient() {
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
               {result.profiles.map((p) => (
-                <VendorCard key={p._id} profile={p} />
+                <VendorCard key={p._id} profile={p} endorsements={endorsementCounts?.[p._id]} />
               ))}
             </div>
             {totalPages > 1 && (

@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { Doc } from "@/convex/_generated/dataModel";
+import { EndorsementBadge } from "./EndorsementBadge";
 
-export function VendorCard({ profile }: { profile: Doc<"vendorProfiles"> }) {
+interface VendorCardProps {
+  profile: Doc<"vendorProfiles">;
+  endorsements?: { peerCount: number; clientCount: number };
+}
+
+export function VendorCard({ profile, endorsements }: VendorCardProps) {
   const topServices = profile.services.slice(0, 3);
   const primaryArea = profile.serviceArea[0];
   const preview =
@@ -17,6 +23,14 @@ export function VendorCard({ profile }: { profile: Doc<"vendorProfiles"> }) {
           </h3>
           {primaryArea && (
             <p className="text-sm text-gray-500 mt-0.5">{primaryArea}</p>
+          )}
+          {endorsements && (
+            <div className="mt-1">
+              <EndorsementBadge
+                peerCount={endorsements.peerCount}
+                clientCount={endorsements.clientCount}
+              />
+            </div>
           )}
         </div>
         {preview && (
