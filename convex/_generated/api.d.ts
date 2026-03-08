@@ -8,7 +8,11 @@
  * @module
  */
 
+import type * as endorsementMutations from "../endorsementMutations.js";
+import type * as endorsements from "../endorsements.js";
 import type * as http from "../http.js";
+import type * as messaging from "../messaging.js";
+import type * as messagingMutations from "../messagingMutations.js";
 import type * as mutations from "../mutations.js";
 import type * as rfqMutations from "../rfqMutations.js";
 import type * as rfqs from "../rfqs.js";
@@ -22,7 +26,11 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  endorsementMutations: typeof endorsementMutations;
+  endorsements: typeof endorsements;
   http: typeof http;
+  messaging: typeof messaging;
+  messagingMutations: typeof messagingMutations;
   mutations: typeof mutations;
   rfqMutations: typeof rfqMutations;
   rfqs: typeof rfqs;
