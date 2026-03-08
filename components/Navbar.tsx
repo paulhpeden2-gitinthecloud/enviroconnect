@@ -6,6 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { useUser, SignInButton, SignOutButton } from "@clerk/nextjs";
 import { ThemeToggle } from "./ThemeToggle";
 import { NotificationBell } from "./NotificationBell";
+import { ChatIcon } from "./ChatIcon";
 
 export function Navbar() {
   const { user, isLoaded } = useUser();
@@ -20,6 +21,9 @@ export function Navbar() {
       <Link href="/rfq" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
         RFQs
       </Link>
+      <Link href="/messages" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
+        Messages
+      </Link>
       <Link href="/about" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
         About
       </Link>
@@ -33,8 +37,9 @@ export function Navbar() {
           Dashboard
         </Link>
         {dbUser && (
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-1">
             <NotificationBell userId={dbUser._id} />
+            <ChatIcon userId={dbUser._id} />
           </div>
         )}
         <SignOutButton>
