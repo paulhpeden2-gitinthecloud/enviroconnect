@@ -103,4 +103,33 @@ export default defineSchema({
   })
     .index("by_userId", ["userId"])
     .index("by_userId_isRead", ["userId", "isRead"]),
+
+  conversations: defineTable({
+    participantIds: v.array(v.id("users")),
+    title: v.optional(v.string()),
+    rfqId: v.optional(v.id("rfqs")),
+    lastMessageAt: v.number(),
+    lastMessagePreview: v.optional(v.string()),
+    createdBy: v.id("users"),
+    createdAt: v.number(),
+  })
+    .index("by_lastMessageAt", ["lastMessageAt"]),
+
+  messages: defineTable({
+    conversationId: v.id("conversations"),
+    senderId: v.id("users"),
+    content: v.string(),
+    attachments: v.optional(
+      v.array(
+        v.object({
+          storageId: v.id("_storage"),
+          fileName: v.string(),
+          fileSize: v.number(),
+        })
+      )
+    ),
+    readBy: v.array(v.id("users")),
+    createdAt: v.number(),
+  })
+    .index("by_conversationId", ["conversationId"]),
 });
