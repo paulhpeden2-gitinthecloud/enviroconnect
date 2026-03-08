@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
@@ -6,6 +7,9 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useUser, SignInButton, SignUpButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { SkeletonProfile } from "@/components/SkeletonProfile";
+import { EndorseButton } from "@/components/EndorseButton";
+import { EndorsementBadge } from "@/components/EndorsementBadge";
+import { EndorsersModal } from "@/components/EndorsersModal";
 
 export default function VendorProfilePage() {
   const params = useParams();
@@ -26,6 +30,11 @@ export default function VendorProfilePage() {
   );
   const saveVendor = useMutation(api.mutations.saveVendor);
   const unsaveVendor = useMutation(api.mutations.unsaveVendor);
+  const endorsementCounts = useQuery(api.endorsements.getEndorsementCounts, {
+    vendorProfileId: params.id as Id<"vendorProfiles">,
+  });
+  const [showEndorsersModal, setShowEndorsersModal] = useState(false);
+  const [endorsersModalTab, setEndorsersModalTab] = useState<"peer" | "client">("peer");
 
   if (profile === undefined)
     return (
@@ -74,6 +83,24 @@ export default function VendorProfilePage() {
           <p className="text-gray-300 mt-1">
             {profile.city}, {profile.state}
           </p>
+          {endorsementCounts && (
+            <div className="mt-2">
+              <EndorsementBadge
+                peerCount={endorsementCounts.peerCount}
+                clientCount={endorsementCounts.clientCount}
+                size="md"
+                onPeerClick={() => { setEndorsersModalTab("peer"); setShowEndorsersModal(true); }}
+                onClientClick={() => { setEndorsersModalTab("client"); setShowEndorsersModal(true); }}
+              />
+            </div>
+          )}
+          <div className="mt-3">
+            <EndorseButton
+              userId={dbUser?._id ?? null}
+              vendorProfileId={params.id as Id<"vendorProfiles">}
+              isOwnProfile={dbUser?._id === profile?.userId}
+            />
+          </div>
         </div>
       </div>
 
@@ -244,6 +271,13 @@ export default function VendorProfilePage() {
           ) : null}
         </aside>
       </div>
+      {showEndorsersModal && (
+        <EndorsersModal
+          vendorProfileId={params.id as Id<"vendorProfiles">}
+          initialTab={endorsersModalTab}
+          onClose={() => setShowEndorsersModal(false)}
+        />
+      )}
     </main>
   );
 }
