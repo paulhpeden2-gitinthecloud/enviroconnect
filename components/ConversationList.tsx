@@ -13,7 +13,7 @@ interface ConversationItem {
     _id: Id<"users">;
     name: string;
     company: string;
-  }>;
+  } | null>;
 }
 
 interface ConversationListProps {
@@ -47,7 +47,9 @@ export function ConversationList({
 }: ConversationListProps) {
   const getDisplayName = (conv: ConversationItem) => {
     if (conv.title) return conv.title;
-    const others = conv.participants.filter((p) => p._id !== currentUserId);
+    const others = conv.participants.filter(
+      (p): p is NonNullable<typeof p> => p != null && p._id !== currentUserId
+    );
     if (others.length === 0) return "You";
     if (others.length === 1) return others[0].name;
     return `${others[0].name} +${others.length - 1}`;

@@ -71,7 +71,7 @@ export function MessagesClient() {
     if (!activeConversation) return "";
     if (activeConversation.title) return activeConversation.title;
     const others = activeConversation.participants.filter(
-      (p) => p._id !== dbUser._id
+      (p): p is NonNullable<typeof p> => p != null && p._id !== dbUser._id
     );
     return others.map((p) => p.name).join(", ") || "Conversation";
   };
