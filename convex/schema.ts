@@ -41,6 +41,17 @@ export default defineSchema({
       "vendorProfileId",
     ]),
 
+  vendorEndorsements: defineTable({
+    endorserId: v.id("users"),
+    vendorProfileId: v.id("vendorProfiles"),
+    type: v.union(v.literal("peer"), v.literal("client")),
+    note: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index("by_vendorProfileId", ["vendorProfileId"])
+    .index("by_endorserId", ["endorserId"])
+    .index("by_endorserId_vendorProfileId", ["endorserId", "vendorProfileId"]),
+
   rfqs: defineTable({
     facilityManagerId: v.id("users"),
     title: v.string(),
