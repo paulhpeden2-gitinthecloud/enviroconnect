@@ -76,17 +76,19 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 ## Next Steps
 
 ### Immediate (when resuming)
-1. **Full UI redesign** — iterate in Figma (MCP added, needs session restart), then implement
-2. **Smoke test proposal attachments** on live site
-3. **Next Phase 2 feature** — seed vendor data, then trust networks
+1. **Finish trust networks + in-app messaging design** — brainstorming was interrupted mid-session
+   - Trust networks: simple one-directional endorse toggle, mirrors savedVendors pattern
+   - In-app messaging: anyone-to-anyone, free-form DMs with optional RFQ link, 1-on-1 threads
+2. **Full UI redesign** — user iterating in Figma (file: Q4RJ2EIeeN5hkrV9oUKISN), implement when shared
+3. **Smoke test proposal attachments** on live site
 
 ### Phase 2 Roadmap
 1. ~~RFQ system~~ (DONE)
 2. ~~Proposal attachments~~ (DONE)
-3. **Full UI redesign** (IN PROGRESS — Figma iteration)
-4. Seed 10-20 real vendor profiles
-5. Trust networks (vendor-to-vendor referrals)
-6. In-app messaging / DMs
+3. **Full UI redesign** (IN PROGRESS — user iterating in Figma)
+4. **Trust networks** (IN PROGRESS — design phase)
+5. **In-app messaging** (IN PROGRESS — design phase)
+6. Seed real vendor data (user will provide)
 7. Meeting scheduler with calendar integration
 8. Payments (Polar or Stripe)
 9. Email-to-referral
