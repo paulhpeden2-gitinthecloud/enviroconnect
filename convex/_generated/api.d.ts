@@ -11,6 +11,8 @@
 import type * as endorsementMutations from "../endorsementMutations.js";
 import type * as endorsements from "../endorsements.js";
 import type * as http from "../http.js";
+import type * as meetingMutations from "../meetingMutations.js";
+import type * as meetings from "../meetings.js";
 import type * as messaging from "../messaging.js";
 import type * as messagingMutations from "../messagingMutations.js";
 import type * as mutations from "../mutations.js";
@@ -29,6 +31,8 @@ declare const fullApi: ApiFromModules<{
   endorsementMutations: typeof endorsementMutations;
   endorsements: typeof endorsements;
   http: typeof http;
+  meetingMutations: typeof meetingMutations;
+  meetings: typeof meetings;
   messaging: typeof messaging;
   messagingMutations: typeof messagingMutations;
   mutations: typeof mutations;
