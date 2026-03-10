@@ -94,9 +94,14 @@ export default defineSchema({
       v.literal("rfq_match"),
       v.literal("rfq_invite"),
       v.literal("rfq_response"),
-      v.literal("rfq_accepted")
+      v.literal("rfq_accepted"),
+      v.literal("meeting_request"),
+      v.literal("meeting_counterproposal"),
+      v.literal("meeting_confirmed"),
+      v.literal("meeting_declined")
     ),
-    rfqId: v.id("rfqs"),
+    rfqId: v.optional(v.id("rfqs")),
+    meetingRequestId: v.optional(v.id("meetingRequests")),
     message: v.string(),
     isRead: v.boolean(),
     createdAt: v.number(),
@@ -132,4 +137,40 @@ export default defineSchema({
     createdAt: v.number(),
   })
     .index("by_conversationId", ["conversationId"]),
+
+  meetingRequests: defineTable({
+    requesterId: v.id("users"),
+    recipientId: v.id("users"),
+    subject: v.string(),
+    note: v.optional(v.string()),
+    meetingType: v.union(v.literal("phone"), v.literal("video"), v.literal("in_person")),
+    rfqId: v.optional(v.id("rfqs")),
+    proposedSlots: v.array(v.object({
+      date: v.number(),
+      startTime: v.string(),
+      endTime: v.string(),
+    })),
+    counterSlots: v.optional(v.array(v.object({
+      date: v.number(),
+      startTime: v.string(),
+      endTime: v.string(),
+    }))),
+    confirmedSlot: v.optional(v.object({
+      date: v.number(),
+      startTime: v.string(),
+      endTime: v.string(),
+    })),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("counterproposed"),
+      v.literal("confirmed"),
+      v.literal("declined"),
+      v.literal("expired")
+    ),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_requesterId", ["requesterId"])
+    .index("by_recipientId", ["recipientId"])
+    .index("by_status", ["status"]),
 });
