@@ -9,6 +9,7 @@ import { useState } from "react";
 import { PdfUpload } from "@/components/PdfUpload";
 import type { UploadedFile } from "@/components/PdfUpload";
 import { PdfPreviewModal } from "@/components/PdfPreviewModal";
+import { MeetingRequestModal } from "@/components/MeetingRequestModal";
 
 function timelineColor(timeline: string) {
   if (timeline.includes("Urgent")) return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300";
@@ -59,6 +60,10 @@ export default function RfqDetailPage() {
   const [success, setSuccess] = useState("");
   const [uploadFiles, setUploadFiles] = useState<UploadedFile[]>([]);
   const [previewFile, setPreviewFile] = useState<{ url: string; fileName: string } | null>(null);
+  const [meetingTarget, setMeetingTarget] = useState<{
+    recipientId: string;
+    recipientName: string;
+  } | null>(null);
 
   const isOwner = dbUser && rfq && rfq.facilityManagerId === dbUser._id;
   const isVendor = dbUser?.role === "vendor";
@@ -340,22 +345,35 @@ export default function RfqDetailPage() {
                             ))}
                           </div>
                         )}
-                        {rfq.status === "open" && r.status === "submitted" && (
-                          <div className="flex gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {rfq.status === "open" && r.status === "submitted" && (
+                            <>
+                              <button
+                                onClick={() => handleAccept(r._id)}
+                                className="text-sm bg-green hover:bg-green-light text-white px-4 py-1.5 rounded-lg transition-colors"
+                              >
+                                Accept
+                              </button>
+                              <button
+                                onClick={() => handleDecline(r._id)}
+                                className="text-sm border border-cream-dark text-gray-600 hover:bg-cream px-4 py-1.5 rounded-lg transition-colors dark:text-gray-300 dark:border-navy dark:hover:bg-navy"
+                              >
+                                Decline
+                              </button>
+                            </>
+                          )}
+                          {r.vendorProfile && (
                             <button
-                              onClick={() => handleAccept(r._id)}
-                              className="text-sm bg-green hover:bg-green-light text-white px-4 py-1.5 rounded-lg transition-colors"
+                              onClick={() => setMeetingTarget({
+                                recipientId: r.vendorProfile!.userId,
+                                recipientName: r.vendorProfile!.companyName,
+                              })}
+                              className="text-xs text-green hover:underline font-medium"
                             >
-                              Accept
+                              Schedule Meeting
                             </button>
-                            <button
-                              onClick={() => handleDecline(r._id)}
-                              className="text-sm border border-cream-dark text-gray-600 hover:bg-cream px-4 py-1.5 rounded-lg transition-colors dark:text-gray-300 dark:border-navy dark:hover:bg-navy"
-                            >
-                              Decline
-                            </button>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -409,6 +427,15 @@ export default function RfqDetailPage() {
           url={previewFile.url}
           fileName={previewFile.fileName}
           onClose={() => setPreviewFile(null)}
+        />
+      )}
+      {meetingTarget && dbUser && (
+        <MeetingRequestModal
+          requesterId={dbUser._id}
+          recipientId={meetingTarget.recipientId as any}
+          recipientName={meetingTarget.recipientName}
+          rfqId={params.id as any}
+          onClose={() => setMeetingTarget(null)}
         />
       )}
     </main>
