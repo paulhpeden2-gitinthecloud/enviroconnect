@@ -53,15 +53,17 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 ### Working (all built, build passes cleanly)
 - Landing page: hero, How It Works (4 steps incl RFQ), Why EnviroConnect (5 features), Services grid, Stats bar, CTAs
 - Vendor directory: search/filter/pagination, skeleton loaders
-- Vendor profile pages: contact info gated behind auth; save/unsave; Request Quote button
+- Vendor profile pages: contact info gated behind auth; save/unsave; Request Quote button; Endorse; Message; Schedule Meeting
 - About page: mission, founder card, contact form (mailto), FAQ accordion
 - Auth: Clerk sign-up/sign-in, onboarding (role + company), role-based dashboard redirect
-- Vendor dashboard: profile editor, publish toggle, RFQ Matches section
-- Facility manager dashboard: saved vendors, My RFQs section
+- Vendor dashboard: profile editor, publish toggle, RFQ Matches, My Proposals, Upcoming Meetings
+- Facility manager dashboard: saved vendors, My RFQs, Upcoming Meetings
 - **RFQ system**: board (/rfq), create form (/rfq/new), detail page (/rfq/[id]), proposal submission/review, notifications
-- **Notifications**: bell icon in navbar, unread count badge, dropdown with mark-read
+- **Notifications**: bell icon in navbar, unread count badge, dropdown with mark-read (routes to /rfq or /meetings)
 - **Proposal attachments**: PDF upload (up to 5 files, drag-and-drop), in-browser preview modal, download
-- **Vendor dashboard "My Proposals"**: tracks proposal status (submitted/accepted/declined) with bold status badges
+- **Trust networks**: one-directional endorsements (peer + client types), count badges on profiles + cards, endorser modal
+- **In-app messaging**: DMs + group chats, PDF attachments, dedicated /messages page, chat icon in navbar
+- **Meeting scheduler**: request meetings with 3 time slots, accept/counter-propose/decline, calendar links (Google/Outlook/.ics), /meetings page with tabs
 - Convex file storage for PDF attachments (`generateUploadUrl` mutation + `ctx.storage.getUrl()` in queries)
 - Dark mode, mobile hamburger, skeleton loaders, cream palette on all pages
 - Deployed: GitHub + Vercel + Convex (auto-deploy via `CONVEX_DEPLOY_KEY`)
@@ -72,25 +74,24 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - `CONVEX_DEPLOYMENT` env var is for local dev only — do NOT add to Vercel.
 - GitHub push via HTTPS works (credentials cached).
 - Convex upload response returns `storageId` as `string` — must type as `Id<"_storage">` when passing to mutations.
+- JSX gotcha: `&&` conditional rendering with multiple sibling elements must wrap in `<>...</>` fragment or Turbopack fails with "Expected '</', got 'ident'".
 
 ## Next Steps
 
 ### Immediate (when resuming)
-1. **Finish trust networks + in-app messaging design** — brainstorming was interrupted mid-session
-   - Trust networks: simple one-directional endorse toggle, mirrors savedVendors pattern
-   - In-app messaging: anyone-to-anyone, free-form DMs with optional RFQ link, 1-on-1 threads
-2. **Full UI redesign** — user iterating in Figma (file: Q4RJ2EIeeN5hkrV9oUKISN), implement when shared
-3. **Smoke test proposal attachments** on live site
+1. **Seed vendor data** — user to provide vendor info; write seed script to bulk-insert
+2. **Smoke test** meeting scheduler on live site
+3. **Full UI redesign** — user iterating in Figma (file: Q4RJ2EIeeN5hkrV9oUKISN), implement when shared
 
 ### Phase 2 Roadmap
 1. ~~RFQ system~~ (DONE)
 2. ~~Proposal attachments~~ (DONE)
-3. **Full UI redesign** (IN PROGRESS — user iterating in Figma)
-4. **Trust networks** (IN PROGRESS — design phase)
-5. **In-app messaging** (IN PROGRESS — design phase)
-6. Seed real vendor data (user will provide)
-7. Meeting scheduler with calendar integration
-8. Payments (Polar or Stripe)
+3. ~~Trust networks~~ (DONE)
+4. ~~In-app messaging~~ (DONE)
+5. ~~Meeting scheduler~~ (DONE)
+6. **Seed vendor data** (next — user to provide data)
+7. **Full UI redesign** (user iterating in Figma)
+8. Payments (deferred — waiting for real users)
 9. Email-to-referral
 10. Reviews & ratings
 
@@ -104,10 +105,17 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - `components/Navbar.tsx` — Nav with hamburger menu, dark mode toggle, auth, notification bell, RFQs link
 - `components/NotificationBell.tsx` — Notification dropdown with unread count
 - `components/Footer.tsx` — 4-column footer shared across all pages
-- `convex/schema.ts` — Database schema (users, vendorProfiles, savedVendors, rfqs, rfqResponses, notifications)
+- `convex/schema.ts` — Database schema (users, vendorProfiles, savedVendors, rfqs, rfqResponses, notifications, meetingRequests, conversations, messages, vendorEndorsements)
 - `convex/rfqs.ts` — RFQ queries (getRfqs, getMyRfqs, getMatchedRfqs, getRfqResponses, notifications)
 - `convex/rfqMutations.ts` — RFQ mutations (createRfq, submitProposal, acceptProposal, closeRfq, notifications)
+- `convex/meetings.ts` — Meeting queries (getMyMeetings, getUpcomingMeetings, getPendingMeetingCount)
+- `convex/meetingMutations.ts` — Meeting mutations (createMeetingRequest, acceptMeetingSlot, counterProposeMeeting, declineMeeting)
 - `convex/http.ts` — Clerk webhook handler with svix verification
+- `components/MeetingRequestModal.tsx` — Modal for scheduling meetings
+- `components/MeetingCard.tsx` — Meeting card with accept/counter/decline
+- `components/CalendarLinks.tsx` — Google Calendar, Outlook, .ics links
+- `components/TimeSlotPicker.tsx` — Date + time range picker
+- `app/meetings/page.tsx` + `MeetingsClient.tsx` — Meetings page with tabs
 
 ## Auth Flow
 1. Sign up via Clerk → `/onboarding` (select role + enter company → writes to Convex `users` table)
@@ -124,4 +132,3 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 ## GitHub
 - Repo: `https://github.com/paulhpeden2-gitinthecloud/enviroconnect`
 - Branch: `main` (all work on main, no feature branches yet)
-- 28 commits as of end of RFQ session
