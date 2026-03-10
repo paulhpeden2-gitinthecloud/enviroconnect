@@ -1,0 +1,89 @@
+"use client";
+
+interface CalendarLinksProps {
+  subject: string;
+  date: number;
+  startTime: string;
+  endTime: string;
+  note?: string;
+}
+
+function toISODateTime(dateMs: number, time: string): string {
+  const d = new Date(dateMs);
+  const [hours, minutes] = time.split(":").map(Number);
+  d.setHours(hours, minutes, 0, 0);
+  return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+
+function formatDateForOutlook(dateMs: number, time: string): string {
+  const d = new Date(dateMs);
+  const [hours, minutes] = time.split(":").map(Number);
+  d.setHours(hours, minutes, 0, 0);
+  return d.toISOString();
+}
+
+export function CalendarLinks({ subject, date, startTime, endTime, note }: CalendarLinksProps) {
+  const start = toISODateTime(date, startTime);
+  const end = toISODateTime(date, endTime);
+  const details = note ? encodeURIComponent(note) : "";
+  const encodedSubject = encodeURIComponent(`EnviroConnect: ${subject}`);
+
+  const googleUrl = `https://calendar.google.com/calendar/event?action=TEMPLATE&text=${encodedSubject}&dates=${start}/${end}&details=${details}`;
+
+  const outlookStart = formatDateForOutlook(date, startTime);
+  const outlookEnd = formatDateForOutlook(date, endTime);
+  const outlookUrl = `https://outlook.live.com/calendar/0/action/compose?subject=${encodedSubject}&startdt=${outlookStart}&enddt=${outlookEnd}&body=${details}`;
+
+  const handleIcs = () => {
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//EnviroConnect//Meeting//EN",
+      "BEGIN:VEVENT",
+      `DTSTART:${start}`,
+      `DTEND:${end}`,
+      `SUMMARY:EnviroConnect: ${subject}`,
+      note ? `DESCRIPTION:${note}` : "",
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].filter(Boolean).join("\r\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `meeting-${new Date(date).toISOString().split("T")[0]}.ics`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      <span className="text-xs text-gray-500 dark:text-gray-400">Add to:</span>
+      <a
+        href={googleUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-xs font-medium text-green hover:underline"
+      >
+        Google Calendar
+      </a>
+      <span className="text-gray-300">|</span>
+      <a
+        href={outlookUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-xs font-medium text-green hover:underline"
+      >
+        Outlook
+      </a>
+      <span className="text-gray-300">|</span>
+      <button
+        onClick={handleIcs}
+        className="text-xs font-medium text-green hover:underline"
+      >
+        Download .ics
+      </button>
+    </div>
+  );
+}
