@@ -24,6 +24,9 @@ export function Navbar() {
       <Link href="/messages" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
         Messages
       </Link>
+      <Link href="/meetings" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
+        Meetings
+      </Link>
       <Link href="/about" onClick={() => setMobileOpen(false)} className="block md:inline text-sm font-medium text-gray-200 hover:text-white py-2 md:py-0 transition-colors">
         About
       </Link>
