@@ -5,6 +5,7 @@ import { api } from "@/convex/_generated/api";
 import { VendorCard } from "@/components/VendorCard";
 import { SkeletonCard } from "@/components/SkeletonCard";
 import Link from "next/link";
+import { MeetingCard } from "@/components/MeetingCard";
 
 function StatusBadge({ status }: { status: "open" | "closed" | "awarded" }) {
   const styles = {
@@ -35,6 +36,14 @@ export default function FacilityDashboard() {
   const myRfqs = useQuery(
     api.rfqs.getMyRfqs,
     dbUser ? { facilityManagerId: dbUser._id } : "skip"
+  );
+  const upcomingMeetings = useQuery(
+    api.meetings.getUpcomingMeetings,
+    dbUser ? { userId: dbUser._id } : "skip"
+  );
+  const pendingMeetingCount = useQuery(
+    api.meetings.getPendingMeetingCount,
+    dbUser ? { userId: dbUser._id } : "skip"
   );
 
   return (
@@ -184,6 +193,67 @@ export default function FacilityDashboard() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {savedVendors.map(
                 (p) => p && <VendorCard key={p._id} profile={p} />
+              )}
+            </div>
+          )}
+        </section>
+
+        {/* Upcoming Meetings Section */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-navy dark:text-cream">
+                Meetings
+              </h2>
+              {(pendingMeetingCount ?? 0) > 0 && (
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-500 text-white">
+                  {pendingMeetingCount} pending
+                </span>
+              )}
+            </div>
+            <Link
+              href="/meetings"
+              className="text-sm text-navy dark:text-cream font-medium underline hover:no-underline"
+            >
+              View all meetings
+            </Link>
+          </div>
+
+          {upcomingMeetings === undefined && (
+            <div className="space-y-3 animate-pulse">
+              <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-5 space-y-2">
+                <div className="h-4 bg-cream-dark rounded w-2/3" />
+                <div className="h-3 bg-cream-dark rounded w-1/3" />
+              </div>
+            </div>
+          )}
+
+          {upcomingMeetings?.length === 0 && (
+            <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-10 text-center">
+              <p className="text-gray-500 dark:text-gray-400 mb-2">
+                No upcoming meetings.
+              </p>
+              <Link
+                href="/meetings"
+                className="text-navy dark:text-cream font-medium underline hover:no-underline text-sm"
+              >
+                View all meetings
+              </Link>
+            </div>
+          )}
+
+          {upcomingMeetings && upcomingMeetings.length > 0 && (
+            <div className="space-y-3">
+              {upcomingMeetings.slice(0, 3).map((m) => (
+                <MeetingCard key={m._id} meeting={m} currentUserId={dbUser!._id} />
+              ))}
+              {upcomingMeetings.length > 3 && (
+                <Link
+                  href="/meetings"
+                  className="block text-center text-sm text-green hover:underline font-medium py-2"
+                >
+                  View {upcomingMeetings.length - 3} more →
+                </Link>
               )}
             </div>
           )}
