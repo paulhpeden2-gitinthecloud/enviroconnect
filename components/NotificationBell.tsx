@@ -60,23 +60,31 @@ export function NotificationBell({ userId }: { userId: Id<"users"> }) {
             {notifications?.length === 0 && (
               <p className="text-sm text-gray-500 text-center py-6">No notifications</p>
             )}
-            {notifications?.slice(0, 20).map((n) => (
-              <Link
-                key={n._id}
-                href={`/rfq/${n.rfqId}`}
-                onClick={() => handleClick(n._id)}
-                className={`block px-4 py-3 text-sm border-b border-cream-dark last:border-0 hover:bg-cream dark:hover:bg-navy transition-colors ${
-                  !n.isRead ? "bg-green/5" : ""
-                }`}
-              >
-                <p className={`text-gray-700 dark:text-gray-300 ${!n.isRead ? "font-medium" : ""}`}>
-                  {n.message}
-                </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  {new Date(n.createdAt).toLocaleDateString()}
-                </p>
-              </Link>
-            ))}
+            {notifications?.slice(0, 20).map((n) => {
+              const isMeetingNotification = n.type.startsWith("meeting_");
+              const href = isMeetingNotification
+                ? `/meetings`
+                : n.rfqId
+                  ? `/rfq/${n.rfqId}`
+                  : `/dashboard`;
+              return (
+                <Link
+                  key={n._id}
+                  href={href}
+                  onClick={() => handleClick(n._id)}
+                  className={`block px-4 py-3 text-sm border-b border-cream-dark last:border-0 hover:bg-cream dark:hover:bg-navy transition-colors ${
+                    !n.isRead ? "bg-green/5" : ""
+                  }`}
+                >
+                  <p className={`text-gray-700 dark:text-gray-300 ${!n.isRead ? "font-medium" : ""}`}>
+                    {n.message}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {new Date(n.createdAt).toLocaleDateString()}
+                  </p>
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}
