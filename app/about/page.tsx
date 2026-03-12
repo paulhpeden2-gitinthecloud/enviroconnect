@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ScrollReveal } from "@/components/ScrollReveal";
+import { ScrollReveal } from "@/components/layout/ScrollReveal";
 
 // ---------------------------------------------------------------------------
 // FAQ data

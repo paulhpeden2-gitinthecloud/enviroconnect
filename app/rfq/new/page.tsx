@@ -32,12 +32,12 @@ function CreateRfqContent() {
   const router = useRouter();
   const { user, isLoaded } = useUser();
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
-  const createRfq = useMutation(api.rfqMutations.createRfq);
+  const createRfq = useMutation(api.rfq.mutations.createRfq);
 
-  const allVendors = useQuery(api.vendors.getVendorProfiles, { page: 1 });
+  const allVendors = useQuery(api.vendors.queries.getVendorProfiles, { page: 1 });
 
   const [form, setForm] = useState({
     title: "",

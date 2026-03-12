@@ -9,7 +9,7 @@ export default function DashboardPage() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
 

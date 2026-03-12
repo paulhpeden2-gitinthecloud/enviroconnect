@@ -44,7 +44,7 @@ http.route({
       const name =
         `${data.first_name ?? ""} ${data.last_name ?? ""}`.trim() || undefined;
       if (email || name) {
-        await ctx.runMutation(api.users.updateUser, {
+        await ctx.runMutation(api.users.mutations.updateUser, {
           clerkId: data.id as string,
           email,
           name,

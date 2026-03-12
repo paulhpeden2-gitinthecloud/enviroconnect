@@ -31,9 +31,18 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - **Electrolize** — body text, applied via CSS rule in `globals.css`
 - Both loaded as local `@font-face` from `public/fonts/` (.ttf files)
 
+### Project Structure
+- **Feature-domain colocation** — components and Convex backend grouped by domain
+- `components/layout/` — Navbar, Footer, ScrollReveal
+- `components/shared/` — ThemeProvider, ThemeToggle, NotificationBell, UserSearch, PdfUpload, PdfPreviewModal, skeletons
+- `components/vendor/`, `components/rfq/`, `components/messaging/`, `components/meetings/`, `components/endorsements/` — domain-specific components
+- `convex/` root — `schema.ts`, `auth.config.ts`, `http.ts`
+- `convex/users/`, `convex/vendors/`, `convex/rfq/`, `convex/meetings/`, `convex/messaging/`, `convex/endorsements/` — each with `queries.ts` + `mutations.ts`
+- `docs/plans/` — active implementation plans, `docs/design/` — active design docs, `docs/archive/` — completed docs, `docs/reference/` — project reference materials
+
 ### Component Patterns
 - Client components use `"use client"` directive
-- Convex queries use `useQuery(api.module.function, args)` with `"skip"` for conditional loading
+- Convex queries use `useQuery(api.domain.queries.function, args)` or `useMutation(api.domain.mutations.function)` with `"skip"` for conditional loading
 - All interactive pages are client components; static pages (footer, directory wrapper) are server components
 - Shared layout: `Navbar` + `{children}` + `Footer` in `app/layout.tsx`
 
@@ -97,25 +106,44 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 
 ## Key Files
 
+### App
 - `app/globals.css` — Tailwind v4 theme config, @font-face declarations, dark mode variables. THE source of truth for colors/fonts.
 - `app/page.tsx` — Landing page (6 sections with scroll animations, hero bg image)
 - `app/about/page.tsx` — About page (mission, team, contact form, FAQ accordion)
 - `app/layout.tsx` — Root layout with Navbar + Footer + Providers
 - `app/providers.tsx` — ThemeProvider → ClerkProvider → ConvexProviderWithClerk
-- `components/Navbar.tsx` — Nav with hamburger menu, dark mode toggle, auth, notification bell, RFQs link
-- `components/NotificationBell.tsx` — Notification dropdown with unread count
-- `components/Footer.tsx` — 4-column footer shared across all pages
+
+### Components (by domain)
+- `components/layout/Navbar.tsx` — Nav with hamburger menu, dark mode toggle, auth, notification bell, RFQs link
+- `components/layout/Footer.tsx` — 4-column footer shared across all pages
+- `components/shared/NotificationBell.tsx` — Notification dropdown with unread count
+- `components/shared/PdfUpload.tsx` + `PdfPreviewModal.tsx` — PDF upload/preview
+- `components/meetings/MeetingCard.tsx` — Meeting card with accept/counter/decline
+- `components/meetings/MeetingRequestModal.tsx` — Modal for scheduling meetings
+- `components/meetings/CalendarLinks.tsx` — Google Calendar, Outlook, .ics links
+- `components/meetings/TimeSlotPicker.tsx` — Date + time range picker
+
+### Convex Backend (by domain)
 - `convex/schema.ts` — Database schema (users, vendorProfiles, savedVendors, rfqs, rfqResponses, notifications, meetingRequests, conversations, messages, vendorEndorsements)
-- `convex/rfqs.ts` — RFQ queries (getRfqs, getMyRfqs, getMatchedRfqs, getRfqResponses, notifications)
-- `convex/rfqMutations.ts` — RFQ mutations (createRfq, submitProposal, acceptProposal, closeRfq, notifications)
-- `convex/meetings.ts` — Meeting queries (getMyMeetings, getUpcomingMeetings, getPendingMeetingCount)
-- `convex/meetingMutations.ts` — Meeting mutations (createMeetingRequest, acceptMeetingSlot, counterProposeMeeting, declineMeeting)
 - `convex/http.ts` — Clerk webhook handler with svix verification
-- `components/MeetingRequestModal.tsx` — Modal for scheduling meetings
-- `components/MeetingCard.tsx` — Meeting card with accept/counter/decline
-- `components/CalendarLinks.tsx` — Google Calendar, Outlook, .ics links
-- `components/TimeSlotPicker.tsx` — Date + time range picker
-- `app/meetings/page.tsx` + `MeetingsClient.tsx` — Meetings page with tabs
+- `convex/users/queries.ts` — getUserByClerkId
+- `convex/users/mutations.ts` — createUser, updateUser
+- `convex/vendors/queries.ts` — getVendorProfiles, getVendorProfile, getVendorProfileByUserId, getSavedVendors, isVendorSaved
+- `convex/vendors/mutations.ts` — createVendorProfile, updateVendorProfile, togglePublishProfile, saveVendor, unsaveVendor
+- `convex/rfq/queries.ts` — getRfqs, getRfq, getMyRfqs, getMatchedRfqs, getRfqResponses, notifications
+- `convex/rfq/mutations.ts` — createRfq, submitProposal, acceptProposal, closeRfq, generateUploadUrl, notifications
+- `convex/meetings/queries.ts` — getMyMeetings, getUpcomingMeetings, getPendingMeetingCount
+- `convex/meetings/mutations.ts` — createMeetingRequest, acceptMeetingSlot, counterProposeMeeting, declineMeeting
+- `convex/messaging/queries.ts` — getConversations, getMessages, getConversation, getUnreadCount, searchUsers
+- `convex/messaging/mutations.ts` — sendMessage, createConversation, markConversationRead
+- `convex/endorsements/queries.ts` — getEndorsementCounts, getEndorsementCountsBatch, hasEndorsed, getEndorsers
+- `convex/endorsements/mutations.ts` — toggleEndorsement
+
+### Docs
+- `docs/plans/` — active implementation plans
+- `docs/design/` — active design docs
+- `docs/archive/` — completed feature docs
+- `docs/reference/` — project kickoff, build guide, concept notes, design assets
 
 ## Auth Flow
 1. Sign up via Clerk → `/onboarding` (select role + enter company → writes to Convex `users` table)

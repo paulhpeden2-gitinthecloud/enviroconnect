@@ -3,15 +3,15 @@ import { useState } from "react";
 import { useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { api } from "@/convex/_generated/api";
-import { RfqCard } from "@/components/RfqCard";
-import { SkeletonRfq } from "@/components/SkeletonRfq";
+import { RfqCard } from "@/components/rfq/RfqCard";
+import { SkeletonRfq } from "@/components/rfq/SkeletonRfq";
 import { SERVICE_TYPES, SERVICE_AREAS, TIMELINE_OPTIONS } from "@/lib/constants";
 import Link from "next/link";
 
 export default function RfqBoardClient() {
   const { user, isLoaded } = useUser();
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
 
@@ -21,7 +21,7 @@ export default function RfqBoardClient() {
   const [timeline, setTimeline] = useState("");
   const [page, setPage] = useState(1);
 
-  const result = useQuery(api.rfqs.getRfqs, {
+  const result = useQuery(api.rfq.queries.getRfqs, {
     search: search || undefined,
     serviceType: serviceType || undefined,
     region: region || undefined,

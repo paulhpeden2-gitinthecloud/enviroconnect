@@ -2,8 +2,8 @@
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useState } from "react";
-import { VendorCard } from "@/components/VendorCard";
-import { SkeletonCard } from "@/components/SkeletonCard";
+import { VendorCard } from "@/components/vendor/VendorCard";
+import { SkeletonCard } from "@/components/shared/SkeletonCard";
 import { SERVICE_TYPES, SERVICE_AREAS, CERTIFICATIONS } from "@/lib/constants";
 
 export function DirectoryClient() {
@@ -13,7 +13,7 @@ export function DirectoryClient() {
   const [certification, setCertification] = useState("");
   const [page, setPage] = useState(1);
 
-  const result = useQuery(api.vendors.getVendorProfiles, {
+  const result = useQuery(api.vendors.queries.getVendorProfiles, {
     search: search || undefined,
     serviceType: serviceType || undefined,
     region: region || undefined,
@@ -23,7 +23,7 @@ export function DirectoryClient() {
 
   const profileIds = result?.profiles?.map((p) => p._id) ?? [];
   const endorsementCounts = useQuery(
-    api.endorsements.getEndorsementCountsBatch,
+    api.endorsements.queries.getEndorsementCountsBatch,
     profileIds.length > 0 ? { vendorProfileIds: profileIds } : "skip"
   );
 

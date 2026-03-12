@@ -3,18 +3,18 @@ import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { MeetingCard } from "@/components/MeetingCard";
+import { MeetingCard } from "@/components/meetings/MeetingCard";
 
 type Tab = "action" | "upcoming" | "past";
 
 export function MeetingsClient() {
   const { user, isLoaded } = useUser();
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
   const meetings = useQuery(
-    api.meetings.getMyMeetings,
+    api.meetings.queries.getMyMeetings,
     dbUser ? { userId: dbUser._id } : "skip"
   );
   const [tab, setTab] = useState<Tab>("action");

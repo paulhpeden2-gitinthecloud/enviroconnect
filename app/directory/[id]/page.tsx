@@ -6,32 +6,32 @@ import { useParams } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
 import { useUser, SignInButton, SignUpButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { SkeletonProfile } from "@/components/SkeletonProfile";
-import { EndorseButton } from "@/components/EndorseButton";
-import { EndorsementBadge } from "@/components/EndorsementBadge";
-import { EndorsersModal } from "@/components/EndorsersModal";
-import { MeetingRequestModal } from "@/components/MeetingRequestModal";
+import { SkeletonProfile } from "@/components/shared/SkeletonProfile";
+import { EndorseButton } from "@/components/endorsements/EndorseButton";
+import { EndorsementBadge } from "@/components/endorsements/EndorsementBadge";
+import { EndorsersModal } from "@/components/endorsements/EndorsersModal";
+import { MeetingRequestModal } from "@/components/meetings/MeetingRequestModal";
 
 export default function VendorProfilePage() {
   const params = useParams();
   const { user, isLoaded } = useUser();
 
-  const profile = useQuery(api.vendors.getVendorProfile, {
+  const profile = useQuery(api.vendors.queries.getVendorProfile, {
     id: params.id as Id<"vendorProfiles">,
   });
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
   const isSaved = useQuery(
-    api.vendors.isVendorSaved,
+    api.vendors.queries.isVendorSaved,
     dbUser && profile
       ? { facilityManagerId: dbUser._id, vendorProfileId: profile._id }
       : "skip"
   );
-  const saveVendor = useMutation(api.mutations.saveVendor);
-  const unsaveVendor = useMutation(api.mutations.unsaveVendor);
-  const endorsementCounts = useQuery(api.endorsements.getEndorsementCounts, {
+  const saveVendor = useMutation(api.vendors.mutations.saveVendor);
+  const unsaveVendor = useMutation(api.vendors.mutations.unsaveVendor);
+  const endorsementCounts = useQuery(api.endorsements.queries.getEndorsementCounts, {
     vendorProfileId: params.id as Id<"vendorProfiles">,
   });
   const [showEndorsersModal, setShowEndorsersModal] = useState(false);

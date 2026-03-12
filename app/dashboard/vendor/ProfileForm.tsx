@@ -8,7 +8,7 @@ import { SERVICE_TYPES, SERVICE_AREAS, CERTIFICATIONS } from "@/lib/constants";
 type Props = { profile: Doc<"vendorProfiles">; userId: Id<"users"> };
 
 export function ProfileForm({ profile, userId }: Props) {
-  const updateProfile = useMutation(api.mutations.updateVendorProfile);
+  const updateProfile = useMutation(api.vendors.mutations.updateVendorProfile);
   const [form, setForm] = useState({
     companyName: profile.companyName,
     description: profile.description,

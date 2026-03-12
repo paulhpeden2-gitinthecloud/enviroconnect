@@ -5,36 +5,36 @@ import { api } from "@/convex/_generated/api";
 import { ProfileForm } from "./ProfileForm";
 import { useEffect } from "react";
 import Link from "next/link";
-import { MeetingCard } from "@/components/MeetingCard";
+import { MeetingCard } from "@/components/meetings/MeetingCard";
 
 export default function VendorDashboard() {
   const { user, isLoaded } = useUser();
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
   const profile = useQuery(
-    api.vendors.getVendorProfileByUserId,
+    api.vendors.queries.getVendorProfileByUserId,
     dbUser ? { userId: dbUser._id } : "skip"
   );
   const matchedRfqs = useQuery(
-    api.rfqs.getMatchedRfqs,
+    api.rfq.queries.getMatchedRfqs,
     profile ? { vendorProfileId: profile._id } : "skip"
   );
   const myProposals = useQuery(
-    api.rfqs.getVendorResponses,
+    api.rfq.queries.getVendorResponses,
     profile ? { vendorProfileId: profile._id } : "skip"
   );
   const upcomingMeetings = useQuery(
-    api.meetings.getUpcomingMeetings,
+    api.meetings.queries.getUpcomingMeetings,
     dbUser ? { userId: dbUser._id } : "skip"
   );
   const pendingMeetingCount = useQuery(
-    api.meetings.getPendingMeetingCount,
+    api.meetings.queries.getPendingMeetingCount,
     dbUser ? { userId: dbUser._id } : "skip"
   );
-  const createProfile = useMutation(api.mutations.createVendorProfile);
-  const togglePublish = useMutation(api.mutations.togglePublishProfile);
+  const createProfile = useMutation(api.vendors.mutations.createVendorProfile);
+  const togglePublish = useMutation(api.vendors.mutations.togglePublishProfile);
 
   useEffect(() => {
     if (dbUser && profile === null) {

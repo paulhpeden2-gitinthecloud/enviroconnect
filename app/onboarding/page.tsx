@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export default function OnboardingPage() {
   const { user } = useUser();
   const router = useRouter();
-  const createUser = useMutation(api.users.createUser);
+  const createUser = useMutation(api.users.mutations.createUser);
   const [role, setRole] = useState<"vendor" | "facility_manager" | "">("");
   const [company, setCompany] = useState("");
   const [loading, setLoading] = useState(false);

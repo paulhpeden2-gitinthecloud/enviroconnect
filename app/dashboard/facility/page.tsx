@@ -2,10 +2,10 @@
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { VendorCard } from "@/components/VendorCard";
-import { SkeletonCard } from "@/components/SkeletonCard";
+import { VendorCard } from "@/components/vendor/VendorCard";
+import { SkeletonCard } from "@/components/shared/SkeletonCard";
 import Link from "next/link";
-import { MeetingCard } from "@/components/MeetingCard";
+import { MeetingCard } from "@/components/meetings/MeetingCard";
 
 function StatusBadge({ status }: { status: "open" | "closed" | "awarded" }) {
   const styles = {
@@ -26,23 +26,23 @@ function StatusBadge({ status }: { status: "open" | "closed" | "awarded" }) {
 export default function FacilityDashboard() {
   const { user, isLoaded } = useUser();
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
   const savedVendors = useQuery(
-    api.vendors.getSavedVendors,
+    api.vendors.queries.getSavedVendors,
     dbUser ? { facilityManagerId: dbUser._id } : "skip"
   );
   const myRfqs = useQuery(
-    api.rfqs.getMyRfqs,
+    api.rfq.queries.getMyRfqs,
     dbUser ? { facilityManagerId: dbUser._id } : "skip"
   );
   const upcomingMeetings = useQuery(
-    api.meetings.getUpcomingMeetings,
+    api.meetings.queries.getUpcomingMeetings,
     dbUser ? { userId: dbUser._id } : "skip"
   );
   const pendingMeetingCount = useQuery(
-    api.meetings.getPendingMeetingCount,
+    api.meetings.queries.getPendingMeetingCount,
     dbUser ? { userId: dbUser._id } : "skip"
   );
 

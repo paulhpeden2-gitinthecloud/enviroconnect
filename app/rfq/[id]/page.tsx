@@ -6,10 +6,10 @@ import { useUser } from "@clerk/nextjs";
 import { Id } from "@/convex/_generated/dataModel";
 import Link from "next/link";
 import { useState } from "react";
-import { PdfUpload } from "@/components/PdfUpload";
-import type { UploadedFile } from "@/components/PdfUpload";
-import { PdfPreviewModal } from "@/components/PdfPreviewModal";
-import { MeetingRequestModal } from "@/components/MeetingRequestModal";
+import { PdfUpload } from "@/components/shared/PdfUpload";
+import type { UploadedFile } from "@/components/shared/PdfUpload";
+import { PdfPreviewModal } from "@/components/shared/PdfPreviewModal";
+import { MeetingRequestModal } from "@/components/meetings/MeetingRequestModal";
 
 function timelineColor(timeline: string) {
   if (timeline.includes("Urgent")) return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300";
@@ -28,27 +28,27 @@ export default function RfqDetailPage() {
   const rfqId = params.id as Id<"rfqs">;
   const { user, isLoaded } = useUser();
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
 
-  const rfq = useQuery(api.rfqs.getRfq, { id: rfqId });
-  const responses = useQuery(api.rfqs.getRfqResponses, { rfqId });
+  const rfq = useQuery(api.rfq.queries.getRfq, { id: rfqId });
+  const responses = useQuery(api.rfq.queries.getRfqResponses, { rfqId });
 
   const vendorProfile = useQuery(
-    api.vendors.getVendorProfileByUserId,
+    api.vendors.queries.getVendorProfileByUserId,
     dbUser?.role === "vendor" ? { userId: dbUser._id } : "skip"
   );
   const hasResponded = useQuery(
-    api.rfqs.hasVendorResponded,
+    api.rfq.queries.hasVendorResponded,
     vendorProfile ? { rfqId, vendorProfileId: vendorProfile._id } : "skip"
   );
 
-  const submitProposal = useMutation(api.rfqMutations.submitProposal);
-  const acceptProposal = useMutation(api.rfqMutations.acceptProposal);
-  const declineProposal = useMutation(api.rfqMutations.declineProposal);
-  const closeRfq = useMutation(api.rfqMutations.closeRfq);
-  const generateUploadUrl = useMutation(api.rfqMutations.generateUploadUrl);
+  const submitProposal = useMutation(api.rfq.mutations.submitProposal);
+  const acceptProposal = useMutation(api.rfq.mutations.acceptProposal);
+  const declineProposal = useMutation(api.rfq.mutations.declineProposal);
+  const closeRfq = useMutation(api.rfq.mutations.closeRfq);
+  const generateUploadUrl = useMutation(api.rfq.mutations.generateUploadUrl);
 
   const [proposalForm, setProposalForm] = useState({
     proposalText: "",

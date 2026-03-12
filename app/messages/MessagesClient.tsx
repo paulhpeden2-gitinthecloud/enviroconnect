@@ -4,15 +4,15 @@ import { useQuery, useMutation } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { ConversationList } from "@/components/ConversationList";
-import { ChatThread } from "@/components/ChatThread";
-import { ChatInput } from "@/components/ChatInput";
-import { NewMessageModal } from "@/components/NewMessageModal";
+import { ConversationList } from "@/components/messaging/ConversationList";
+import { ChatThread } from "@/components/messaging/ChatThread";
+import { ChatInput } from "@/components/messaging/ChatInput";
+import { NewMessageModal } from "@/components/messaging/NewMessageModal";
 
 export function MessagesClient() {
   const { user, isLoaded } = useUser();
   const dbUser = useQuery(
-    api.users.getUserByClerkId,
+    api.users.queries.getUserByClerkId,
     isLoaded && user ? { clerkId: user.id } : "skip"
   );
 
@@ -22,25 +22,25 @@ export function MessagesClient() {
   const [mobileShowChat, setMobileShowChat] = useState(false);
 
   const conversations = useQuery(
-    api.messaging.getConversations,
+    api.messaging.queries.getConversations,
     dbUser ? { userId: dbUser._id } : "skip"
   );
 
   const messages = useQuery(
-    api.messaging.getMessages,
+    api.messaging.queries.getMessages,
     activeConversationId && dbUser
       ? { conversationId: activeConversationId, userId: dbUser._id }
       : "skip"
   );
 
   const activeConversation = useQuery(
-    api.messaging.getConversation,
+    api.messaging.queries.getConversation,
     activeConversationId && dbUser
       ? { conversationId: activeConversationId, userId: dbUser._id }
       : "skip"
   );
 
-  const markRead = useMutation(api.messagingMutations.markConversationRead);
+  const markRead = useMutation(api.messaging.mutations.markConversationRead);
 
   useEffect(() => {
     if (activeConversationId && dbUser) {
