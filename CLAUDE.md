@@ -88,9 +88,10 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 ## Next Steps
 
 ### Immediate (when resuming)
-1. **Seed vendor data** — user to provide vendor info; write seed script to bulk-insert
-2. **Smoke test** meeting scheduler on live site
-3. **Full UI redesign** — user iterating in Figma (file: Q4RJ2EIeeN5hkrV9oUKISN), implement when shared
+1. ~~**Seed vendor data**~~ (DONE — 25 PNW vendors seeded via `convex/seed.ts`)
+2. **Seed vendors on prod** — run `npx convex run seed:seedVendors` against prod deployment
+3. **Smoke test** meeting scheduler on live site
+4. **Full UI redesign** — user iterating in Figma (file: Q4RJ2EIeeN5hkrV9oUKISN), implement when shared
 
 ### Phase 2 Roadmap
 1. ~~RFQ system~~ (DONE)
@@ -98,7 +99,7 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 3. ~~Trust networks~~ (DONE)
 4. ~~In-app messaging~~ (DONE)
 5. ~~Meeting scheduler~~ (DONE)
-6. **Seed vendor data** (next — user to provide data)
+6. ~~Seed vendor data~~ (DONE)
 7. **Full UI redesign** (user iterating in Figma)
 8. Payments (deferred — waiting for real users)
 9. Email-to-referral
@@ -138,6 +139,9 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - `convex/messaging/mutations.ts` — sendMessage, createConversation, markConversationRead
 - `convex/endorsements/queries.ts` — getEndorsementCounts, getEndorsementCountsBatch, hasEndorsed, getEndorsers
 - `convex/endorsements/mutations.ts` — toggleEndorsement
+
+### Seed Data
+- `convex/seed.ts` — seedVendors (25 PNW vendors) + clearSeedVendors (cleanup). Run: `npx convex run seed:seedVendors`
 
 ### Docs
 - `docs/plans/` — active implementation plans
