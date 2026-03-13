@@ -72,7 +72,8 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - **Proposal attachments**: PDF upload (up to 5 files, drag-and-drop), in-browser preview modal, download
 - **Trust networks**: one-directional endorsements (peer + client types), count badges on profiles + cards, endorser modal
 - **In-app messaging**: DMs + group chats, PDF attachments, dedicated /messages page, chat icon in navbar
-- **Meeting scheduler**: request meetings with 3 time slots, accept/counter-propose/decline, calendar links (Google/Outlook/.ics), /meetings page with tabs
+- **Meeting scheduler**: request meetings with 3 time slots, accept/counter-propose/decline, calendar links (Google/Outlook/.ics), /meetings page with tabs, conditional location fields (phone/video platform/address), meeting link edit on confirmed video meetings
+- **Reviews & ratings**: FM-only reviews (5 categories: quality, communication, timeliness, compliance, value), dual path (RFQ engagement or endorsement-based), star ratings on vendor cards + profile pages + directory grid, category breakdown on profile
 - Convex file storage for PDF attachments (`generateUploadUrl` mutation + `ctx.storage.getUrl()` in queries)
 - Dark mode, mobile hamburger, skeleton loaders, cream palette on all pages
 - Deployed: GitHub + Vercel + Convex (auto-deploy via `CONVEX_DEPLOY_KEY`)
@@ -103,7 +104,7 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 7. **Full UI redesign** (user iterating in Figma)
 8. Payments (deferred — waiting for real users)
 9. Email-to-referral
-10. Reviews & ratings
+10. ~~Reviews & ratings~~ (DONE — plan at `docs/plans/2026-03-12-meeting-location-and-reviews-plan.md`)
 
 ## Key Files
 
@@ -123,9 +124,11 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - `components/meetings/MeetingRequestModal.tsx` — Modal for scheduling meetings
 - `components/meetings/CalendarLinks.tsx` — Google Calendar, Outlook, .ics links
 - `components/meetings/TimeSlotPicker.tsx` — Date + time range picker
+- `components/reviews/StarRating.tsx` — Interactive StarRating + read-only StarRatingDisplay
+- `components/reviews/ReviewModal.tsx` — Review form with dual path (RFQ or endorsement-based)
 
 ### Convex Backend (by domain)
-- `convex/schema.ts` — Database schema (users, vendorProfiles, savedVendors, rfqs, rfqResponses, notifications, meetingRequests, conversations, messages, vendorEndorsements)
+- `convex/schema.ts` — Database schema (users, vendorProfiles, savedVendors, rfqs, rfqResponses, notifications, meetingRequests, conversations, messages, vendorEndorsements, reviews)
 - `convex/http.ts` — Clerk webhook handler with svix verification
 - `convex/users/queries.ts` — getUserByClerkId
 - `convex/users/mutations.ts` — createUser, updateUser
@@ -134,11 +137,13 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - `convex/rfq/queries.ts` — getRfqs, getRfq, getMyRfqs, getMatchedRfqs, getRfqResponses, notifications
 - `convex/rfq/mutations.ts` — createRfq, submitProposal, acceptProposal, closeRfq, generateUploadUrl, notifications
 - `convex/meetings/queries.ts` — getMyMeetings, getUpcomingMeetings, getPendingMeetingCount
-- `convex/meetings/mutations.ts` — createMeetingRequest, acceptMeetingSlot, counterProposeMeeting, declineMeeting
+- `convex/meetings/mutations.ts` — createMeetingRequest (with locationDetail), acceptMeetingSlot, counterProposeMeeting, declineMeeting, updateMeetingLink
 - `convex/messaging/queries.ts` — getConversations, getMessages, getConversation, getUnreadCount, searchUsers
 - `convex/messaging/mutations.ts` — sendMessage, createConversation, markConversationRead
 - `convex/endorsements/queries.ts` — getEndorsementCounts, getEndorsementCountsBatch, hasEndorsed, getEndorsers
 - `convex/endorsements/mutations.ts` — toggleEndorsement
+- `convex/reviews/queries.ts` — getVendorReviews, getVendorRatingSummary, getVendorRatingSummaryBatch, canReviewVendor
+- `convex/reviews/mutations.ts` — submitReview
 
 ### Seed Data
 - `convex/seed.ts` — seedVendors (25 PNW vendors) + clearSeedVendors (cleanup). Run: `npx convex run seed:seedVendors`

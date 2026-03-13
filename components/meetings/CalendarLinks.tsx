@@ -6,6 +6,8 @@ interface CalendarLinksProps {
   startTime: string;
   endTime: string;
   note?: string;
+  location?: string;
+  meetingLink?: string;
 }
 
 function toISODateTime(dateMs: number, time: string): string {
@@ -22,13 +24,14 @@ function formatDateForOutlook(dateMs: number, time: string): string {
   return d.toISOString();
 }
 
-export function CalendarLinks({ subject, date, startTime, endTime, note }: CalendarLinksProps) {
+export function CalendarLinks({ subject, date, startTime, endTime, note, location, meetingLink }: CalendarLinksProps) {
   const start = toISODateTime(date, startTime);
   const end = toISODateTime(date, endTime);
-  const details = note ? encodeURIComponent(note) : "";
+  const detailParts = [note, location ? `Location: ${location}` : "", meetingLink ? `Meeting Link: ${meetingLink}` : ""].filter(Boolean).join("\n");
+  const details = encodeURIComponent(detailParts);
   const encodedSubject = encodeURIComponent(`EnviroConnect: ${subject}`);
 
-  const googleUrl = `https://calendar.google.com/calendar/event?action=TEMPLATE&text=${encodedSubject}&dates=${start}/${end}&details=${details}`;
+  const googleUrl = `https://calendar.google.com/calendar/event?action=TEMPLATE&text=${encodedSubject}&dates=${start}/${end}&details=${details}&location=${encodeURIComponent(location || meetingLink || "")}`;
 
   const outlookStart = formatDateForOutlook(date, startTime);
   const outlookEnd = formatDateForOutlook(date, endTime);
@@ -43,6 +46,8 @@ export function CalendarLinks({ subject, date, startTime, endTime, note }: Calen
       `DTSTART:${start}`,
       `DTEND:${end}`,
       `SUMMARY:EnviroConnect: ${subject}`,
+      location ? `LOCATION:${location}` : "",
+      meetingLink ? `URL:${meetingLink}` : "",
       note ? `DESCRIPTION:${note}` : "",
       "END:VEVENT",
       "END:VCALENDAR",

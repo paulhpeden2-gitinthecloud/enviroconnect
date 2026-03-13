@@ -22,9 +22,14 @@ export function DirectoryClient() {
   });
 
   const profileIds = result?.profiles?.map((p) => p._id) ?? [];
+  const vendorIds = result?.profiles?.map((p) => p.userId) ?? [];
   const endorsementCounts = useQuery(
     api.endorsements.queries.getEndorsementCountsBatch,
     profileIds.length > 0 ? { vendorProfileIds: profileIds } : "skip"
+  );
+  const ratings = useQuery(
+    api.reviews.queries.getVendorRatingSummaryBatch,
+    vendorIds.length > 0 ? { vendorIds } : "skip"
   );
 
   const totalPages = result ? Math.ceil(result.total / result.pageSize) : 1;
@@ -129,7 +134,7 @@ export function DirectoryClient() {
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
               {result.profiles.map((p) => (
-                <VendorCard key={p._id} profile={p} endorsements={endorsementCounts?.[p._id]} />
+                <VendorCard key={p._id} profile={p} endorsements={endorsementCounts?.[p._id]} rating={ratings?.[p.userId]} />
               ))}
             </div>
             {totalPages > 1 && (

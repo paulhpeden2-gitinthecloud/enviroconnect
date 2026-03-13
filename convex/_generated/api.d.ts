@@ -15,6 +15,8 @@ import type * as meetings_mutations from "../meetings/mutations.js";
 import type * as meetings_queries from "../meetings/queries.js";
 import type * as messaging_mutations from "../messaging/mutations.js";
 import type * as messaging_queries from "../messaging/queries.js";
+import type * as reviews_mutations from "../reviews/mutations.js";
+import type * as reviews_queries from "../reviews/queries.js";
 import type * as rfq_mutations from "../rfq/mutations.js";
 import type * as rfq_queries from "../rfq/queries.js";
 import type * as seed from "../seed.js";
@@ -37,6 +39,8 @@ declare const fullApi: ApiFromModules<{
   "meetings/queries": typeof meetings_queries;
   "messaging/mutations": typeof messaging_mutations;
   "messaging/queries": typeof messaging_queries;
+  "reviews/mutations": typeof reviews_mutations;
+  "reviews/queries": typeof reviews_queries;
   "rfq/mutations": typeof rfq_mutations;
   "rfq/queries": typeof rfq_queries;
   seed: typeof seed;

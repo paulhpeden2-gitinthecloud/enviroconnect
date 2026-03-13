@@ -37,8 +37,11 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
     { date: 0, startTime: "09:00", endTime: "10:00" },
   ]);
   const [submitting, setSubmitting] = useState(false);
+  const [editingLink, setEditingLink] = useState(false);
+  const [linkValue, setLinkValue] = useState(meeting.meetingLink ?? "");
 
   const acceptSlot = useMutation(api.meetings.mutations.acceptMeetingSlot);
+  const updateMeetingLink = useMutation(api.meetings.mutations.updateMeetingLink);
   const counterPropose = useMutation(api.meetings.mutations.counterProposeMeeting);
   const declineMeeting = useMutation(api.meetings.mutations.declineMeeting);
 
@@ -117,6 +120,16 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
         <p className="text-sm text-gray-600 dark:text-gray-300">{meeting.note}</p>
       )}
 
+      {/* Location detail */}
+      {meeting.locationDetail && (
+        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+          <span className="font-medium text-navy dark:text-cream">
+            {meeting.meetingType === "phone" ? "Phone:" : meeting.meetingType === "video" ? "Platform:" : "Location:"}
+          </span>
+          {meeting.locationDetail}
+        </div>
+      )}
+
       {/* Confirmed slot */}
       {meeting.status === "confirmed" && meeting.confirmedSlot && (
         <div className="bg-green/5 dark:bg-green/10 rounded-lg p-3 space-y-2">
@@ -129,7 +142,48 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
             startTime={meeting.confirmedSlot.startTime}
             endTime={meeting.confirmedSlot.endTime}
             note={meeting.note}
+            location={meeting.locationDetail}
+            meetingLink={meeting.meetingLink}
           />
+          {meeting.meetingType === "video" && (
+            <div className="mt-2">
+              {meeting.meetingLink ? (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">Link:</span>
+                  <a href={meeting.meetingLink} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-green hover:underline break-all">
+                    {meeting.meetingLink}
+                  </a>
+                  <button onClick={() => { setEditingLink(true); setLinkValue(meeting.meetingLink ?? ""); }} className="text-xs text-gray-400 hover:text-gray-600">Edit</button>
+                </div>
+              ) : !editingLink ? (
+                <button onClick={() => setEditingLink(true)} className="text-xs font-medium text-green hover:underline">
+                  + Add meeting link
+                </button>
+              ) : null}
+              {editingLink && (
+                <div className="flex items-center gap-2 mt-1">
+                  <input
+                    type="url"
+                    value={linkValue}
+                    onChange={(e) => setLinkValue(e.target.value)}
+                    placeholder="Paste meeting link..."
+                    className="flex-1 border border-cream-dark rounded-lg px-2 py-1 text-xs bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+                  />
+                  <button
+                    onClick={async () => {
+                      if (!linkValue.trim()) return;
+                      await updateMeetingLink({ meetingRequestId: meeting._id, userId: currentUserId, meetingLink: linkValue.trim() });
+                      setEditingLink(false);
+                    }}
+                    className="text-xs font-medium text-white bg-green px-3 py-1 rounded-lg hover:bg-green-light"
+                  >
+                    Save
+                  </button>
+                  <button onClick={() => setEditingLink(false)} className="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 

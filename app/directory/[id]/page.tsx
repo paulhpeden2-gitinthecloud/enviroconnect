@@ -11,6 +11,8 @@ import { EndorseButton } from "@/components/endorsements/EndorseButton";
 import { EndorsementBadge } from "@/components/endorsements/EndorsementBadge";
 import { EndorsersModal } from "@/components/endorsements/EndorsersModal";
 import { MeetingRequestModal } from "@/components/meetings/MeetingRequestModal";
+import { ReviewModal } from "@/components/reviews/ReviewModal";
+import { StarRatingDisplay } from "@/components/reviews/StarRating";
 
 export default function VendorProfilePage() {
   const params = useParams();
@@ -37,6 +39,9 @@ export default function VendorProfilePage() {
   const [showEndorsersModal, setShowEndorsersModal] = useState(false);
   const [endorsersModalTab, setEndorsersModalTab] = useState<"peer" | "client">("peer");
   const [showMeetingModal, setShowMeetingModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const ratingSummary = useQuery(api.reviews.queries.getVendorRatingSummary, profile ? { vendorId: profile.userId } : "skip");
+  const vendorReviews = useQuery(api.reviews.queries.getVendorReviews, profile ? { vendorId: profile.userId } : "skip");
 
   if (profile === undefined)
     return (
@@ -94,6 +99,12 @@ export default function VendorProfilePage() {
                 onPeerClick={() => { setEndorsersModalTab("peer"); setShowEndorsersModal(true); }}
                 onClientClick={() => { setEndorsersModalTab("client"); setShowEndorsersModal(true); }}
               />
+            </div>
+          )}
+          {ratingSummary && (
+            <div className="flex items-center gap-2 mt-2">
+              <StarRatingDisplay value={ratingSummary.overall} size="md" />
+              <span className="text-gray-300 text-sm">{ratingSummary.overall.toFixed(1)} ({ratingSummary.count} {ratingSummary.count === 1 ? "review" : "reviews"})</span>
             </div>
           )}
           <div className="mt-3 flex items-center gap-3">
@@ -187,6 +198,62 @@ export default function VendorProfilePage() {
               </div>
             </section>
           )}
+          {vendorReviews && vendorReviews.length > 0 && (
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-navy">Reviews</h2>
+                {ratingSummary && (
+                  <div className="flex items-center gap-2">
+                    <StarRatingDisplay value={ratingSummary.overall} />
+                    <span className="text-sm text-gray-500">{ratingSummary.overall.toFixed(1)} avg</span>
+                  </div>
+                )}
+              </div>
+              {ratingSummary && (
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+                  {[
+                    { label: "Quality", value: ratingSummary.categories.qualityOfWork },
+                    { label: "Communication", value: ratingSummary.categories.communication },
+                    { label: "Timeliness", value: ratingSummary.categories.timeliness },
+                    { label: "Compliance", value: ratingSummary.categories.complianceKnowledge },
+                    { label: "Value", value: ratingSummary.categories.value },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="text-center bg-white dark:bg-navy-light rounded-lg p-3 border border-cream-dark">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{label}</p>
+                      <p className="text-lg font-semibold text-navy dark:text-cream">{value.toFixed(1)}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="space-y-4">
+                {vendorReviews.map((review) => (
+                  <div key={review._id} className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-5 space-y-2">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-navy dark:text-cream">{review.reviewerCompany}</p>
+                        <p className="text-xs text-gray-500">{review.serviceType}</p>
+                      </div>
+                      <div className="text-right">
+                        <StarRatingDisplay value={review.overallRating} />
+                        <p className="text-xs text-gray-400 mt-0.5">{new Date(review.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    {review.rfqId ? (
+                      <p className="text-xs text-gray-400">Via RFQ engagement</p>
+                    ) : review.projectName ? (
+                      <p className="text-xs text-gray-400">Project: {review.projectName}</p>
+                    ) : null}
+                    {review.serviceCompletedDate && (
+                      <p className="text-xs text-gray-400">Service completed: {new Date(review.serviceCompletedDate).toLocaleDateString()}</p>
+                    )}
+                    {review.notes && (
+                      <p className="text-sm text-gray-600 dark:text-gray-300">{review.notes}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
 
         <aside className="space-y-4">
@@ -223,6 +290,15 @@ export default function VendorProfilePage() {
               </button>
             </SignUpButton>
           ) : null}
+
+          {dbUser?.role === "facility_manager" && dbUser._id !== profile?.userId && (
+            <button
+              onClick={() => setShowReviewModal(true)}
+              className="w-full border-2 border-green text-green hover:bg-green hover:text-white font-semibold py-2.5 rounded-lg transition-colors text-sm"
+            >
+              Write a Review
+            </button>
+          )}
 
           {isLoaded && user ? (
             <div className="bg-white dark:bg-navy-light rounded-xl p-6 border border-cream-dark shadow-sm">
@@ -308,6 +384,14 @@ export default function VendorProfilePage() {
           recipientId={profile.userId}
           recipientName={profile.companyName}
           onClose={() => setShowMeetingModal(false)}
+        />
+      )}
+      {showReviewModal && dbUser && profile && (
+        <ReviewModal
+          reviewerId={dbUser._id}
+          vendorId={profile.userId}
+          vendorName={profile.companyName}
+          onClose={() => setShowReviewModal(false)}
         />
       )}
     </main>

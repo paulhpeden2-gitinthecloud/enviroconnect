@@ -175,4 +175,27 @@ export default defineSchema({
     .index("by_requesterId", ["requesterId"])
     .index("by_recipientId", ["recipientId"])
     .index("by_status", ["status"]),
+
+  reviews: defineTable({
+    reviewerId: v.id("users"),
+    vendorId: v.id("users"),
+    rfqId: v.optional(v.id("rfqs")),
+    projectName: v.optional(v.string()),
+    serviceType: v.string(),
+    ratings: v.object({
+      qualityOfWork: v.number(),
+      communication: v.number(),
+      timeliness: v.number(),
+      complianceKnowledge: v.number(),
+      value: v.number(),
+    }),
+    overallRating: v.number(),
+    notes: v.optional(v.string()),
+    serviceCompletedDate: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_vendorId", ["vendorId"])
+    .index("by_reviewerId", ["reviewerId"])
+    .index("by_vendorId_reviewerId", ["vendorId", "reviewerId"]),
 });

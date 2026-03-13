@@ -13,6 +13,8 @@ interface MeetingRequestModalProps {
   onClose: () => void;
 }
 
+const VIDEO_PLATFORMS = ["Microsoft Teams", "Zoom", "Google Meet"] as const;
+
 export function MeetingRequestModal({
   requesterId,
   recipientId,
@@ -23,6 +25,7 @@ export function MeetingRequestModal({
   const [subject, setSubject] = useState("");
   const [note, setNote] = useState("");
   const [meetingType, setMeetingType] = useState<"phone" | "video" | "in_person">("video");
+  const [locationDetail, setLocationDetail] = useState("");
   const [slots, setSlots] = useState<TimeSlot[]>([
     { date: 0, startTime: "09:00", endTime: "10:00" },
   ]);
@@ -44,6 +47,14 @@ export function MeetingRequestModal({
       setError("At least one time slot with a date is required");
       return;
     }
+    if (!locationDetail.trim()) {
+      setError(
+        meetingType === "phone" ? "Phone number is required" :
+        meetingType === "video" ? "Please select a video platform" :
+        "Location is required"
+      );
+      return;
+    }
 
     setSubmitting(true);
     try {
@@ -53,6 +64,7 @@ export function MeetingRequestModal({
         subject: subject.trim(),
         note: note.trim() || undefined,
         meetingType,
+        locationDetail: locationDetail.trim(),
         rfqId,
         proposedSlots: validSlots,
       });
@@ -105,7 +117,7 @@ export function MeetingRequestModal({
                     name="meetingType"
                     value={type}
                     checked={meetingType === type}
-                    onChange={() => setMeetingType(type)}
+                    onChange={() => { setMeetingType(type); setLocationDetail(""); }}
                     className="accent-green"
                   />
                   <span className="text-sm text-gray-700 dark:text-gray-300">
@@ -115,6 +127,48 @@ export function MeetingRequestModal({
               ))}
             </div>
           </div>
+
+          {meetingType === "phone" && (
+            <div>
+              <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Phone Number *</label>
+              <input
+                type="tel"
+                value={locationDetail}
+                onChange={(e) => setLocationDetail(e.target.value)}
+                placeholder="e.g., (206) 555-0123"
+                className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+              />
+            </div>
+          )}
+
+          {meetingType === "video" && (
+            <div>
+              <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Video Platform *</label>
+              <select
+                value={locationDetail}
+                onChange={(e) => setLocationDetail(e.target.value)}
+                className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+              >
+                <option value="">Select platform...</option>
+                {VIDEO_PLATFORMS.map((p) => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {meetingType === "in_person" && (
+            <div>
+              <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Location / Address *</label>
+              <input
+                type="text"
+                value={locationDetail}
+                onChange={(e) => setLocationDetail(e.target.value)}
+                placeholder="e.g., 123 Main St, Seattle, WA"
+                className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-medium text-navy dark:text-cream mb-2">

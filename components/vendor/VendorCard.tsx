@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { Doc } from "@/convex/_generated/dataModel";
 import { EndorsementBadge } from "@/components/endorsements/EndorsementBadge";
+import { StarRatingDisplay } from "@/components/reviews/StarRating";
 
 interface VendorCardProps {
   profile: Doc<"vendorProfiles">;
   endorsements?: { peerCount: number; clientCount: number };
+  rating?: { overall: number; count: number };
 }
 
-export function VendorCard({ profile, endorsements }: VendorCardProps) {
+export function VendorCard({ profile, endorsements, rating }: VendorCardProps) {
   const topServices = profile.services.slice(0, 3);
   const primaryArea = profile.serviceArea[0];
   const preview =
@@ -30,6 +32,12 @@ export function VendorCard({ profile, endorsements }: VendorCardProps) {
                 peerCount={endorsements.peerCount}
                 clientCount={endorsements.clientCount}
               />
+            </div>
+          )}
+          {rating && (
+            <div className="flex items-center gap-1.5 mt-1">
+              <StarRatingDisplay value={rating.overall} />
+              <span className="text-xs text-gray-500">({rating.count})</span>
             </div>
           )}
         </div>
