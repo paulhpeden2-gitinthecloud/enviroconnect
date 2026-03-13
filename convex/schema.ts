@@ -144,6 +144,8 @@ export default defineSchema({
     subject: v.string(),
     note: v.optional(v.string()),
     meetingType: v.union(v.literal("phone"), v.literal("video"), v.literal("in_person")),
+    locationDetail: v.optional(v.string()),
+    meetingLink: v.optional(v.string()),
     rfqId: v.optional(v.id("rfqs")),
     proposedSlots: v.array(v.object({
       date: v.number(),
