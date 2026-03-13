@@ -164,3 +164,24 @@ export const declineMeeting = mutation({
     });
   },
 });
+
+export const updateMeetingLink = mutation({
+  args: {
+    meetingRequestId: v.id("meetingRequests"),
+    userId: v.id("users"),
+    meetingLink: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const meeting = await ctx.db.get(args.meetingRequestId);
+    if (!meeting) throw new Error("Meeting request not found");
+    if (meeting.status !== "confirmed") throw new Error("Meeting must be confirmed to add a link");
+
+    const isParticipant = meeting.requesterId === args.userId || meeting.recipientId === args.userId;
+    if (!isParticipant) throw new Error("Unauthorized");
+
+    await ctx.db.patch(args.meetingRequestId, {
+      meetingLink: args.meetingLink,
+      updatedAt: Date.now(),
+    });
+  },
+});
