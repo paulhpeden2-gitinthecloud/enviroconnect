@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import LayoutSwitch from "@/components/layout/LayoutSwitch";
 
 export const metadata: Metadata = {
   title: "EnviroConnect — Environmental Compliance Vendor Directory",
@@ -19,9 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Providers>
-          <Navbar />
-          {children}
-          <Footer />
+          <LayoutSwitch>{children}</LayoutSwitch>
         </Providers>
       </body>
     </html>
