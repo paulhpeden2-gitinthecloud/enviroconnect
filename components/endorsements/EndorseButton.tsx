@@ -29,8 +29,8 @@ export function EndorseButton({
 
   if (!userId) {
     return (
-      <p className="text-sm text-gray-500">
-        <a href="/sign-in" className="text-green hover:underline font-medium">
+      <p className="text-sm text-[#6E8CA0]">
+        <a href="/sign-in" className="text-[#4A7C59] hover:underline font-medium">
           Sign in
         </a>{" "}
         to endorse this vendor
@@ -79,8 +79,8 @@ export function EndorseButton({
           disabled={loading}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
             isEndorsed
-              ? "bg-green text-white hover:bg-green-light"
-              : "border-2 border-green text-green hover:bg-green/5"
+              ? "bg-[#4A7C59] hover:bg-[#3D6649] text-white"
+              : "border border-[#D5DDE5] text-[#1C3144] hover:bg-[#F0F4F8]"
           } ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {loading ? "..." : isEndorsed ? "✓ Endorsed" : "Endorse"}
@@ -91,7 +91,7 @@ export function EndorseButton({
               setShowNote(false);
               setNote("");
             }}
-            className="text-sm text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+            className="text-sm text-[#6E8CA0] hover:text-[#1C3144] transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -104,7 +104,7 @@ export function EndorseButton({
             value={note}
             onChange={(e) => setNote(e.target.value.slice(0, 200))}
             placeholder="Add a short note (optional)"
-            className="flex-1 text-sm border border-cream-dark rounded-lg px-3 py-2 bg-white dark:bg-navy dark:border-navy-light dark:text-white focus:outline-none focus:ring-2 focus:ring-green/30"
+            className="flex-1 text-sm border border-[#D5DDE5] rounded-lg px-3 py-2 bg-white text-[#0F1D2B] focus:outline-none focus:ring-2 focus:ring-[#93C5FD]"
             maxLength={200}
             onKeyDown={(e) => {
               if (e.key === "Enter") handleToggle();
@@ -113,7 +113,7 @@ export function EndorseButton({
           <button
             onClick={handleToggle}
             disabled={loading}
-            className="px-4 py-2 bg-green text-white text-sm font-medium rounded-lg hover:bg-green-light transition-colors disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-[#4A7C59] text-white text-sm font-medium rounded-lg hover:bg-[#3D6649] transition-colors disabled:opacity-50 cursor-pointer"
           >
             Submit
           </button>

@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, useCallback } from "react";
+import { FileText, X } from "lucide-react";
 
 interface UploadedFile {
   file: File;
@@ -69,7 +70,7 @@ export function PdfUpload({
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+      <label className="block text-sm font-medium text-text-deep mb-1">
         Attachments (PDF, up to {maxFiles} files)
       </label>
 
@@ -84,14 +85,15 @@ export function PdfUpload({
           onClick={() => inputRef.current?.click()}
           className={`border-2 border-dashed rounded-lg px-4 py-6 text-center cursor-pointer transition-colors ${
             dragOver
-              ? "border-green bg-green/5"
-              : "border-cream-dark hover:border-green/50 dark:border-navy dark:hover:border-green/50"
+              ? "border-accent bg-accent/5"
+              : "border-mist hover:border-accent bg-cloud"
           }`}
         >
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Drop PDFs here or <span className="text-green font-medium">click to browse</span>
+          <p className="text-sm text-slate-custom">
+            Drop PDFs here or{" "}
+            <span className="text-accent font-medium">click to browse</span>
           </p>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-xs text-slate-custom mt-1">
             Max {maxSizeMb}MB per file
           </p>
           <input
@@ -113,20 +115,18 @@ export function PdfUpload({
           {files.map((f, i) => (
             <div
               key={`${f.file.name}-${i}`}
-              className="flex items-center gap-2 bg-cream dark:bg-navy rounded-lg px-3 py-2 text-sm border border-cream-dark dark:border-navy-light"
+              className="flex items-center gap-2 bg-surface border border-mist rounded-md px-3 py-2 text-sm"
             >
-              <svg className="w-4 h-4 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H4zm7 1.5L16.5 9H12a1 1 0 01-1-1V3.5zM7 11h6a1 1 0 110 2H7a1 1 0 110-2zm0 3h4a1 1 0 110 2H7a1 1 0 110-2z" />
-              </svg>
-              <span className="text-navy dark:text-cream truncate max-w-[150px]">
+              <FileText className="w-4 h-4 text-danger shrink-0" />
+              <span className="text-text-deep truncate max-w-[150px]">
                 {f.file.name}
               </span>
-              <span className="text-gray-400 text-xs shrink-0">{formatSize(f.file.size)}</span>
+              <span className="text-slate-custom text-xs shrink-0">{formatSize(f.file.size)}</span>
               {f.uploading && (
-                <span className="text-xs text-green animate-pulse">Uploading...</span>
+                <span className="text-xs text-accent animate-pulse">Uploading...</span>
               )}
               {f.error && (
-                <span className="text-xs text-red-500">{f.error}</span>
+                <span className="text-xs text-danger">{f.error}</span>
               )}
               <button
                 type="button"
@@ -134,11 +134,10 @@ export function PdfUpload({
                   e.stopPropagation();
                   removeFile(i);
                 }}
-                className="text-gray-400 hover:text-red-500 transition-colors ml-1"
+                className="text-slate-custom hover:text-danger transition-colors ml-1"
+                aria-label={`Remove ${f.file.name}`}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X className="w-4 h-4" />
               </button>
             </div>
           ))}

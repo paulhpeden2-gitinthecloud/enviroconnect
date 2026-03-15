@@ -76,12 +76,15 @@ export function ReviewModal({ reviewerId, vendorId, vendorName, onClose }: Revie
     }
   };
 
+  const inputClass =
+    "w-full border border-[#D5DDE5] rounded-lg px-3 py-2 text-sm bg-white text-[#0F1D2B] placeholder-[#6E8CA0] focus:outline-none focus:ring-2 focus:ring-[#93C5FD]";
+
   if (eligibility === undefined) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-        <div className="relative bg-white dark:bg-navy-light rounded-xl shadow-xl p-8">
-          <p className="text-sm text-gray-500">Checking eligibility...</p>
+        <div className="fixed inset-0 bg-black/40" onClick={onClose} />
+        <div className="relative bg-white border border-[#D5DDE5] rounded-lg shadow-lg p-8">
+          <p className="text-sm text-[#6E8CA0]">Checking eligibility...</p>
         </div>
       </div>
     );
@@ -90,10 +93,13 @@ export function ReviewModal({ reviewerId, vendorId, vendorName, onClose }: Revie
   if (!eligibility.canReview) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-        <div className="relative bg-white dark:bg-navy-light rounded-xl shadow-xl p-8 max-w-sm text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{eligibility.reason}</p>
-          <button onClick={onClose} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-navy-light transition-colors">
+        <div className="fixed inset-0 bg-black/40" onClick={onClose} />
+        <div className="relative bg-white border border-[#D5DDE5] rounded-lg shadow-lg p-8 max-w-sm text-center">
+          <p className="text-sm text-[#6E8CA0] mb-4">{eligibility.reason}</p>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium bg-[#1C3144] text-white rounded-lg hover:bg-[#0F1D2B] transition-colors"
+          >
             Close
           </button>
         </div>
@@ -107,13 +113,16 @@ export function ReviewModal({ reviewerId, vendorId, vendorName, onClose }: Revie
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white dark:bg-navy-light rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-cream-dark">
-          <h2 className="text-lg font-semibold text-navy dark:text-cream">
+      <div className="fixed inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white border border-[#D5DDE5] rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#D5DDE5]">
+          <h2 className="text-lg font-semibold text-[#1C3144]">
             Review {vendorName}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <button
+            onClick={onClose}
+            className="text-[#6E8CA0] hover:text-[#1C3144] transition-colors cursor-pointer"
+          >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -123,15 +132,29 @@ export function ReviewModal({ reviewerId, vendorId, vendorName, onClose }: Revie
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {!autoPath && (
             <div>
-              <label className="block text-sm font-medium text-navy dark:text-cream mb-2">Review based on:</label>
+              <label className="block text-sm font-medium text-[#1C3144] mb-2">Review based on:</label>
               <div className="flex gap-3">
                 <label className="flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="reviewPath" value="rfq" checked={reviewPath === "rfq"} onChange={() => setReviewPath("rfq")} className="accent-green" />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">RFQ Engagement</span>
+                  <input
+                    type="radio"
+                    name="reviewPath"
+                    value="rfq"
+                    checked={reviewPath === "rfq"}
+                    onChange={() => setReviewPath("rfq")}
+                    className="accent-[#4A7C59]"
+                  />
+                  <span className="text-sm text-[#0F1D2B]">RFQ Engagement</span>
                 </label>
                 <label className="flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="reviewPath" value="endorsement" checked={reviewPath === "endorsement"} onChange={() => setReviewPath("endorsement")} className="accent-green" />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Past Project</span>
+                  <input
+                    type="radio"
+                    name="reviewPath"
+                    value="endorsement"
+                    checked={reviewPath === "endorsement"}
+                    onChange={() => setReviewPath("endorsement")}
+                    className="accent-[#4A7C59]"
+                  />
+                  <span className="text-sm text-[#0F1D2B]">Past Project</span>
                 </label>
               </div>
             </div>
@@ -139,11 +162,11 @@ export function ReviewModal({ reviewerId, vendorId, vendorName, onClose }: Revie
 
           {effectivePath === "rfq" && (
             <div>
-              <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Select RFQ *</label>
+              <label className="block text-sm font-medium text-[#1C3144] mb-1">Select RFQ *</label>
               <select
                 value={selectedRfqId}
                 onChange={(e) => setSelectedRfqId(e.target.value)}
-                className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+                className={inputClass}
               >
                 <option value="">Select an RFQ...</option>
                 {eligibility.reviewableRfqs.map((rfq) => (
@@ -155,23 +178,23 @@ export function ReviewModal({ reviewerId, vendorId, vendorName, onClose }: Revie
 
           {effectivePath === "endorsement" && (
             <div>
-              <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Project Name *</label>
+              <label className="block text-sm font-medium text-[#1C3144] mb-1">Project Name *</label>
               <input
                 type="text"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 placeholder="e.g., Annual stormwater permit renewal"
-                className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+                className={inputClass}
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Service Type *</label>
+            <label className="block text-sm font-medium text-[#1C3144] mb-1">Service Type *</label>
             <select
               value={serviceType}
               onChange={(e) => setServiceType(e.target.value)}
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+              className={inputClass}
             >
               <option value="">Select service...</option>
               {SERVICE_TYPES.map((s) => (
@@ -181,11 +204,11 @@ export function ReviewModal({ reviewerId, vendorId, vendorName, onClose }: Revie
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-navy dark:text-cream mb-3">Ratings *</label>
+            <label className="block text-sm font-medium text-[#1C3144] mb-3">Ratings *</label>
             <div className="space-y-3">
               {RATING_CATEGORIES.map(({ key, label }) => (
                 <div key={key} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{label}</span>
+                  <span className="text-sm text-[#0F1D2B]">{label}</span>
                   <StarRating value={ratings[key]} onChange={(val) => setRating(key, val)} />
                 </div>
               ))}
@@ -193,36 +216,40 @@ export function ReviewModal({ reviewerId, vendorId, vendorName, onClose }: Revie
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Notes (optional)</label>
+            <label className="block text-sm font-medium text-[#1C3144] mb-1">Notes (optional)</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
               placeholder="Share your experience with this vendor's trustworthiness and performance..."
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green resize-none"
+              className={`${inputClass} resize-none`}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Date of Service Completed (optional)</label>
+            <label className="block text-sm font-medium text-[#1C3144] mb-1">Date of Service Completed (optional)</label>
             <input
               type="date"
               value={serviceDate}
               onChange={(e) => setServiceDate(e.target.value)}
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+              className={inputClass}
             />
           </div>
 
           {error && <p className="text-sm text-red-500">{error}</p>}
 
           <div className="flex justify-end gap-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-cream dark:hover:bg-navy rounded-lg transition-colors">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm text-[#6E8CA0] hover:bg-[#F0F4F8] rounded-lg transition-colors"
+            >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || !effectivePath}
-              className="px-5 py-2 text-sm font-medium bg-green hover:bg-green-light text-white rounded-lg transition-colors disabled:opacity-50"
+              className="px-5 py-2 text-sm font-medium bg-[#4A7C59] hover:bg-[#3D6649] text-white rounded-lg transition-colors disabled:opacity-50"
             >
               {submitting ? "Submitting..." : "Submit Review"}
             </button>

@@ -25,7 +25,7 @@ export function EndorsementBadge({
         <button
           type="button"
           onClick={onPeerClick}
-          className={`${textSize} text-gray-500 dark:text-gray-400 hover:text-green transition-colors flex items-center gap-1 cursor-pointer`}
+          className={`${textSize} bg-[#E8F0E3] text-[#4A7C59] font-semibold rounded px-2 py-0.5 hover:bg-[#d8eacc] transition-colors flex items-center gap-1 cursor-pointer`}
         >
           <svg
             className={size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4"}
@@ -44,13 +44,13 @@ export function EndorsementBadge({
         </button>
       )}
       {peerCount > 0 && clientCount > 0 && (
-        <span className={`${textSize} text-gray-300 dark:text-gray-600`}>·</span>
+        <span className={`${textSize} text-[#D5DDE5]`}>·</span>
       )}
       {clientCount > 0 && (
         <button
           type="button"
           onClick={onClientClick}
-          className={`${textSize} text-gray-500 dark:text-gray-400 hover:text-green transition-colors flex items-center gap-1 cursor-pointer`}
+          className={`${textSize} bg-[#E8F0E3] text-[#4A7C59] font-semibold rounded px-2 py-0.5 hover:bg-[#d8eacc] transition-colors flex items-center gap-1 cursor-pointer`}
         >
           <svg
             className={size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4"}

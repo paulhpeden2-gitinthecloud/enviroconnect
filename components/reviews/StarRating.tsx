@@ -20,7 +20,7 @@ export function StarRating({ value, onChange, size = "md" }: StarRatingProps) {
           className={`${onChange ? "cursor-pointer hover:scale-110" : "cursor-default"} transition-transform`}
         >
           <svg
-            className={`${starSize} ${star <= value ? "text-yellow-400 fill-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
+            className={`${starSize} ${star <= value ? "text-[#4A7C59] fill-[#4A7C59]" : "text-[#D5DDE5] fill-[#D5DDE5]"}`}
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -46,7 +46,7 @@ export function StarRatingDisplay({ value, size = "sm" }: { value: number; size?
         return (
           <svg
             key={star}
-            className={`${starSize} ${filled ? "text-yellow-400 fill-yellow-400" : half ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
+            className={`${starSize} ${filled ? "text-[#4A7C59] fill-[#4A7C59]" : half ? "text-[#4A7C59]" : "text-[#D5DDE5] fill-[#D5DDE5]"}`}
             viewBox="0 0 20 20"
             fill={filled ? "currentColor" : "none"}
             stroke={half || !filled ? "currentColor" : "none"}
