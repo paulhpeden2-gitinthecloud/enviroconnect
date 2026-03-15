@@ -1,0 +1,52 @@
+# Front-End Build Instructions: Interactive Scroll Landing Page
+
+## 1. Role & Tech Stack
+You are an expert front-end developer specializing in high-end, award-winning interactive web design. 
+* **Core Tech:** Semantic HTML5, CSS3 (modern variables, Grid/Flexbox), and Vanilla JavaScript.
+* **Animation Library:** You must use **GSAP** and **ScrollTrigger** for all layout shifts, parallax, and number scrubbing effects. 
+* **Assets:** Use high-quality placeholder images of Mount Rainier (or Pacific Northwest mountains) at sunset with warm, dramatic lighting.
+
+## 2. Global Styles & UI Elements
+* **Typography:** Use a clean, modern, geometric sans-serif font (e.g., 'Montserrat', 'Inter'). Text color is primarily a rich dark charcoal (`#2b2724`) on light backgrounds, and white on dark backgrounds.
+* **Custom Cursor:** `cursor: none` on the body. Create a custom cursor (semi-transparent white circle, thin white border) that smoothly follows the mouse position using GSAP `quickSetter`. Include a subtle scale-up hover state for links.
+* **Navigation:** The navigation ("HOME TOUR ABOUT CONTACT" - small, uppercase, widely spaced) exists in both sections but changes positioning contextually.
+
+---
+
+## 3. Section 1: The "Contact" Hero Scroll
+**Visual Layout:**
+* Full viewport section (`100vh`, `100vw`).
+* **Background:** Fixed full-screen image of Mount Rainier at sunset. Sky occupies the top 50%.
+* **Text Container:** Positioned over the sky area.
+    * **Main Header:** "CONTACT THE PARK" (Centered, uppercase, bold, very large).
+    * **Left Column:** "Mailing Address:" (Bold) `<br>` "55210 238th Avenue East Ashford, WA 98304" (Regular).
+    * **Right Column:** * Row 1: The Navigation ("HOME TOUR ABOUT CONTACT") aligned top-right.
+        * Row 2: "STAY CONNECTED" (Small header) `<br>` "Instagram Twitter Facebook".
+
+**Animation Logic:**
+* The text container is initially hidden above the viewport (`translateY`).
+* As the user scrolls down, use GSAP ScrollTrigger (`scrub: true`) to smoothly slide the text container **down** into the upper half of the viewport. Reversing the scroll slides it back up.
+
+---
+
+## 4. Section 2: "Icon on the Horizon" Split-Screen Collapse
+**State A: Initial Split-Screen Layout**
+* A 50/50 split-screen layout (`min-height: 100vh`).
+* **Left Column (White Background):** * Contains the Navigation at the top-left.
+    * Text content centered: Subheader "An Icon on", Main header "the Horizon" (Extra large, bold), Paragraph "Ascending to 14,410 feet above sea level..."
+* **Right Column (Image Background):** * Mount Rainier peaks image.
+    * Overlaid at the bottom-left of this column is giant, bold white text: "**14 410**". Next to it, smaller text: "feet above sea level".
+
+**State B: Scrolled & Locked Final State (The Transition)**
+Use ScrollTrigger (`pin: true`, `scrub: true`) to lock the section and animate the layout shift based on scroll progress.
+* **The Layout Shift:** The white left column translates to the right edge and shrinks in width into a narrow, vertical white strip. The text inside it does not disappear but becomes squished, clipped (`overflow: hidden`), and unreadable. A thin dark vertical line separates this white strip from the image.
+* **The Image Expansion:** As the white column shrinks rightward, the right column (mountain image) expands leftward to take up almost the entire viewport.
+* **The Number Counter Scrub & Translation:** * The giant "14 410" scrubs down to "**0**".
+    * Simultaneously, the numbers translate horizontally towards the center-left of the viewport.
+    * The "feet above sea level" text disappears.
+    * A new word, "**FEET**", appears stacked **vertically** immediately to the right of the giant "0".
+    * A stylized white "N" symbol (minimalist compass arrows) fades in directly below the "0".
+* **Nav Update:** The "ABOUT" link in the squished nav clearly shows an active state (e.g., underlined).
+
+## 5. Execution Requirement
+Provide the complete, modular code (`index.html`, `style.css`, and `script.js`). Prioritize the GSAP logic for Section 2, ensuring the synchronized layout shift, text clipping on the right, and the number translation/counter work flawlessly together.

@@ -7,10 +7,11 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 - Frontend: Next.js 14 (App Router) + React 19 + Tailwind CSS v4
 - Backend/Database: Convex (real-time, cloud-hosted)
 - Auth: Clerk (roles: "vendor" | "facility_manager", JWT integration with Convex)
-- Animations: framer-motion (scroll reveals, FAQ accordion)
+- Animations: framer-motion (scroll reveals, FAQ accordion) + GSAP/ScrollTrigger (landing page, planned)
 - Deployment: Vercel (live at https://enviroconnect.vercel.app)
 
 **Key Dependencies:** `@clerk/nextjs`, `convex`, `framer-motion`, `svix` (webhook verification)
+**Planned Dependencies (not yet installed):** `gsap`, `lucide-react`
 
 ## Architecture & Conventions
 
@@ -89,10 +90,21 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 ## Next Steps
 
 ### Immediate (when resuming)
-1. ~~**Seed vendor data**~~ (DONE — 25 PNW vendors seeded via `convex/seed.ts`)
-2. **Seed vendors on prod** — run `npx convex run seed:seedVendors` against prod deployment
-3. **Smoke test** meeting scheduler on live site
-4. **Full UI redesign** — user iterating in Figma (file: Q4RJ2EIeeN5hkrV9oUKISN), implement when shared
+1. **Full UI Redesign** — IN PROGRESS, plan written, ready for execution
+   - Design doc: `docs/plans/2026-03-13-full-ui-redesign-design.md`
+   - Implementation plan: `docs/plans/2026-03-14-full-ui-redesign-plan.md` (29 tasks, 4 waves)
+   - Design system: `evergreen-design-system.md` (project root)
+   - GSAP scroll spec: `design_v2` (project root)
+   - User chose: subagent-driven execution in current session
+2. **Smoke test** meeting scheduler + reviews on live site (after redesign deploys)
+
+### UI Redesign Architecture (approved)
+- **Navigation:** Hybrid — FloatingNavbar (public) + Sidebar/TopBar (authenticated)
+- **Landing page:** GSAP cinematic scroll (hero, split-screen collapse, staggered stats)
+- **Design system:** Evergreen Exchange (Steel Blue + Moss Green + Cloud)
+- **Fonts:** DM Sans + Source Sans 3 + JetBrains Mono (Google Fonts)
+- **Icons:** Lucide React
+- **Layout:** `LayoutSwitch` component conditionally renders public vs app layout
 
 ### Phase 2 Roadmap
 1. ~~RFQ system~~ (DONE)
@@ -101,10 +113,10 @@ B2B vendor directory for PNW industrial facility managers to discover environmen
 4. ~~In-app messaging~~ (DONE)
 5. ~~Meeting scheduler~~ (DONE)
 6. ~~Seed vendor data~~ (DONE)
-7. **Full UI redesign** (user iterating in Figma)
-8. Payments (deferred — waiting for real users)
-9. Email-to-referral
-10. ~~Reviews & ratings~~ (DONE — plan at `docs/plans/2026-03-12-meeting-location-and-reviews-plan.md`)
+7. ~~Reviews & ratings~~ (DONE)
+8. **Full UI redesign** (IN PROGRESS — plan at `docs/plans/2026-03-14-full-ui-redesign-plan.md`)
+9. Payments (deferred — waiting for real users)
+10. Email-to-referral
 
 ## Key Files
 
