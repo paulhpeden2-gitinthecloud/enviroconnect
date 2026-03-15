@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, User, Mail, Phone } from "lucide-react";
 import { ScrollReveal } from "@/components/layout/ScrollReveal";
 
 // ---------------------------------------------------------------------------
@@ -42,52 +43,6 @@ const faqs = [
 ];
 
 // ---------------------------------------------------------------------------
-// Chevron icon
-// ---------------------------------------------------------------------------
-
-function ChevronIcon({ open }: { open: boolean }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="currentColor"
-      className={`w-5 h-5 transform transition-transform duration-200${open ? " rotate-180" : ""}`}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-      />
-    </svg>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// User avatar placeholder SVG
-// ---------------------------------------------------------------------------
-
-function UserAvatarIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-10 h-10 text-gray-400"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-      />
-    </svg>
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Page component
 // ---------------------------------------------------------------------------
 
@@ -112,17 +67,17 @@ export default function AboutPage() {
   }
 
   const inputClasses =
-    "w-full border border-cream-dark rounded-lg px-4 py-2.5 text-sm bg-white dark:bg-navy-light focus:outline-none focus:ring-2 focus:ring-navy/30";
+    "w-full bg-surface border border-mist rounded-md px-4 py-2.5 text-sm text-text-deep placeholder:text-slate-custom focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-focus-ring/40 transition-colors";
 
   return (
     <main>
       {/* ── Section 1: Mission Hero ── */}
-      <section className="bg-cream py-24 px-4">
+      <section className="bg-cloud py-24 px-4">
         <ScrollReveal className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-navy mb-6">
+          <h1 className="text-4xl font-bold text-text-deep font-heading mb-6">
             Connecting the Pacific Northwest&apos;s Environmental Industry
           </h1>
-          <div className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed space-y-4">
+          <div className="text-slate-custom text-lg leading-relaxed space-y-4">
             <p>
               Finding qualified environmental compliance vendors shouldn&apos;t
               require cold calls, outdated referral lists, or hours of research.
@@ -149,35 +104,53 @@ export default function AboutPage() {
       <section className="py-24 px-4">
         <div className="max-w-4xl mx-auto">
           <ScrollReveal>
-            <h2 className="text-3xl font-bold text-navy text-center mb-12">
+            <h2 className="text-3xl font-bold text-text-deep font-heading text-center mb-12">
               Our Team
             </h2>
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>
-            <div className="max-w-md mx-auto bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-8 text-center">
+            <div className="max-w-md mx-auto bg-surface border border-mist rounded-lg shadow-md p-8 text-center">
               {/* Avatar placeholder */}
-              <div className="w-24 h-24 bg-cream-dark rounded-full mx-auto mb-4 flex items-center justify-center">
-                <UserAvatarIcon />
+              <div className="w-24 h-24 bg-cloud rounded-full mx-auto mb-4 flex items-center justify-center">
+                <User className="w-10 h-10 text-slate-custom" />
               </div>
 
-              <p className="text-xl font-semibold text-navy">Your Name</p>
-              <p className="text-sm text-green mt-1">Founder &amp; CEO</p>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mt-4">
+              <p className="text-xl font-semibold text-text-deep font-heading">Your Name</p>
+              <p className="text-sm text-accent mt-1">Founder &amp; CEO</p>
+              <p className="text-slate-custom text-sm mt-4">
                 Environmental compliance professional with a passion for
                 connecting industry with qualified service providers across the
                 Pacific Northwest.
               </p>
+
+              {/* Contact icons */}
+              <div className="flex justify-center gap-4 mt-5">
+                <a
+                  href="mailto:contact@enviroconnect.com"
+                  aria-label="Email"
+                  className="text-slate-custom hover:text-accent transition-colors"
+                >
+                  <Mail className="w-5 h-5" />
+                </a>
+                <a
+                  href="tel:+1-800-000-0000"
+                  aria-label="Phone"
+                  className="text-slate-custom hover:text-accent transition-colors"
+                >
+                  <Phone className="w-5 h-5" />
+                </a>
+              </div>
             </div>
           </ScrollReveal>
         </div>
       </section>
 
       {/* ── Section 3: Contact Form ── */}
-      <section id="contact" className="bg-cream-dark/30 py-24 px-4">
+      <section id="contact" className="bg-cloud py-24 px-4">
         <div className="max-w-2xl mx-auto">
           <ScrollReveal>
-            <h2 className="text-3xl font-bold text-navy text-center mb-12">
+            <h2 className="text-3xl font-bold text-text-deep font-heading text-center mb-12">
               Get in Touch
             </h2>
 
@@ -186,7 +159,7 @@ export default function AboutPage() {
               <div>
                 <label
                   htmlFor="contact-name"
-                  className="block text-sm font-medium text-navy mb-1"
+                  className="block text-sm font-medium text-text-deep mb-1"
                 >
                   Name
                 </label>
@@ -205,7 +178,7 @@ export default function AboutPage() {
               <div>
                 <label
                   htmlFor="contact-email"
-                  className="block text-sm font-medium text-navy mb-1"
+                  className="block text-sm font-medium text-text-deep mb-1"
                 >
                   Email
                 </label>
@@ -224,7 +197,7 @@ export default function AboutPage() {
               <div>
                 <label
                   htmlFor="contact-subject"
-                  className="block text-sm font-medium text-navy mb-1"
+                  className="block text-sm font-medium text-text-deep mb-1"
                 >
                   Subject
                 </label>
@@ -245,7 +218,7 @@ export default function AboutPage() {
               <div>
                 <label
                   htmlFor="contact-message"
-                  className="block text-sm font-medium text-navy mb-1"
+                  className="block text-sm font-medium text-text-deep mb-1"
                 >
                   Message
                 </label>
@@ -263,7 +236,7 @@ export default function AboutPage() {
               {/* Submit */}
               <button
                 type="submit"
-                className="bg-green hover:bg-green-light text-white font-semibold px-6 py-3 rounded-lg transition-colors w-full"
+                className="bg-accent hover:bg-accent-hover text-white rounded-lg font-medium px-6 py-3 transition-colors w-full"
               >
                 Send Message
               </button>
@@ -276,27 +249,27 @@ export default function AboutPage() {
       <section id="faq" className="py-24 px-4">
         <div className="max-w-3xl mx-auto">
           <ScrollReveal>
-            <h2 className="text-3xl font-bold text-navy text-center mb-12">
+            <h2 className="text-3xl font-bold text-text-deep font-heading text-center mb-12">
               Frequently Asked Questions
             </h2>
 
-            <div className="space-y-3">
+            <div>
               {faqs.map((faq, index) => {
                 const isOpen = openFaq === index;
                 return (
-                  <div
-                    key={index}
-                    className="border border-cream-dark rounded-lg overflow-hidden"
-                  >
+                  <div key={index} className="border-b border-mist">
                     <button
                       type="button"
                       onClick={() => handleFaqToggle(index)}
-                      className="w-full flex justify-between items-center p-5 text-left"
+                      aria-expanded={isOpen}
+                      className="w-full flex justify-between items-center py-5 text-left gap-4"
                     >
-                      <span className="font-medium text-navy dark:text-white">
+                      <span className="font-semibold text-text-deep font-heading">
                         {faq.question}
                       </span>
-                      <ChevronIcon open={isOpen} />
+                      <ChevronDown
+                        className={`w-5 h-5 text-slate-custom shrink-0 transition-transform duration-200${isOpen ? " rotate-180" : ""}`}
+                      />
                     </button>
 
                     <AnimatePresence initial={false}>
@@ -309,7 +282,7 @@ export default function AboutPage() {
                           transition={{ duration: 0.2 }}
                           style={{ overflow: "hidden" }}
                         >
-                          <div className="px-5 pb-5 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                          <div className="pb-5 text-slate-custom text-sm leading-relaxed">
                             {faq.answer}
                           </div>
                         </motion.div>
