@@ -23,9 +23,9 @@ export function MeetingsClient() {
     return (
       <div className="space-y-4 animate-pulse">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 space-y-2">
-            <div className="h-4 bg-cream-dark rounded w-2/3" />
-            <div className="h-3 bg-cream-dark rounded w-1/3" />
+          <div key={i} className="bg-surface border border-mist rounded-lg p-6 space-y-2">
+            <div className="h-4 bg-mist rounded w-2/3" />
+            <div className="h-3 bg-mist rounded w-1/3" />
           </div>
         ))}
       </div>
@@ -68,23 +68,23 @@ export function MeetingsClient() {
   return (
     <div>
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 bg-cream-dark/50 dark:bg-navy/50 rounded-lg p-1">
+      <div className="flex border-b border-mist mb-6">
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`flex-1 text-sm font-medium py-2 px-3 rounded-md transition-colors ${
+            className={`flex items-center gap-1.5 px-5 py-3 text-sm font-medium transition-colors focus:outline-none ${
               tab === t.key
-                ? "bg-white dark:bg-navy-light text-navy dark:text-cream shadow-sm"
-                : "text-gray-500 dark:text-gray-400 hover:text-navy dark:hover:text-cream"
+                ? "border-b-2 border-accent text-accent -mb-px"
+                : "text-slate-custom hover:text-primary"
             }`}
           >
             {t.label}
             {t.count > 0 && (
-              <span className={`ml-1.5 text-xs font-bold px-1.5 py-0.5 rounded-full ${
+              <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${
                 t.key === "action" && t.count > 0
-                  ? "bg-red-500 text-white"
-                  : "bg-cream-dark dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+                  ? "bg-danger-surface text-danger"
+                  : "bg-mist text-slate-custom"
               }`}>
                 {t.count}
               </span>
@@ -97,15 +97,15 @@ export function MeetingsClient() {
       {meetings === undefined ? (
         <div className="space-y-4 animate-pulse">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 space-y-2">
-              <div className="h-4 bg-cream-dark rounded w-2/3" />
-              <div className="h-3 bg-cream-dark rounded w-1/3" />
+            <div key={i} className="bg-surface border border-mist rounded-lg p-6 space-y-2">
+              <div className="h-4 bg-mist rounded w-2/3" />
+              <div className="h-3 bg-mist rounded w-1/3" />
             </div>
           ))}
         </div>
       ) : currentList.length === 0 ? (
-        <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-10 text-center">
-          <p className="text-gray-500 dark:text-gray-400">
+        <div className="bg-surface border border-mist rounded-lg p-10 text-center">
+          <p className="text-slate-custom">
             {tab === "action"
               ? "No meetings need your attention right now."
               : tab === "upcoming"
@@ -120,7 +120,7 @@ export function MeetingsClient() {
               {actionNeeded.map((m) => (
                 <MeetingCard key={m._id} meeting={m} currentUserId={dbUser._id} />
               ))}
-              <p className="text-xs font-medium text-gray-400 uppercase tracking-wide pt-2">Waiting on response</p>
+              <p className="text-xs font-medium text-slate-custom uppercase tracking-wide pt-2">Waiting on response</p>
               {waiting.map((m) => (
                 <MeetingCard key={m._id} meeting={m} currentUserId={dbUser._id} />
               ))}

@@ -56,17 +56,17 @@ export function ConversationList({
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-cream-dark">
+    <div className="flex flex-col h-full bg-surface border-r border-mist">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-mist">
         <h2
-          className="text-lg font-semibold text-navy dark:text-white"
+          className="text-lg font-semibold text-text-deep"
           style={{ fontFamily: "var(--font-heading)" }}
         >
           Messages
         </h2>
         <button
           onClick={onNewMessage}
-          className="p-2 text-green hover:bg-green/10 rounded-lg transition-colors cursor-pointer"
+          className="p-2 text-accent hover:bg-accent/10 rounded-lg transition-colors cursor-pointer"
           aria-label="New message"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -80,10 +80,10 @@ export function ConversationList({
           <div className="p-4 space-y-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse flex gap-3">
-                <div className="w-10 h-10 rounded-full bg-cream-dark dark:bg-navy" />
+                <div className="w-10 h-10 rounded-full bg-mist" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-cream-dark dark:bg-navy rounded w-2/3" />
-                  <div className="h-3 bg-cream-dark dark:bg-navy rounded w-full" />
+                  <div className="h-4 bg-mist rounded w-2/3" />
+                  <div className="h-3 bg-mist rounded w-full" />
                 </div>
               </div>
             ))}
@@ -92,10 +92,10 @@ export function ConversationList({
 
         {conversations?.length === 0 && (
           <div className="p-8 text-center">
-            <p className="text-sm text-gray-500 dark:text-gray-400">No conversations yet</p>
+            <p className="text-sm text-slate-custom">No conversations yet</p>
             <button
               onClick={onNewMessage}
-              className="mt-3 text-sm text-green hover:underline font-medium cursor-pointer"
+              className="mt-3 text-sm text-accent hover:underline font-medium cursor-pointer"
             >
               Start a conversation
             </button>
@@ -106,39 +106,39 @@ export function ConversationList({
           <button
             key={conv._id}
             onClick={() => onSelect(conv._id)}
-            className={`w-full text-left px-4 py-3 border-b border-cream-dark last:border-0 hover:bg-cream dark:hover:bg-navy transition-colors cursor-pointer flex items-start gap-3 ${
-              activeId === conv._id ? "bg-cream dark:bg-navy" : ""
+            className={`w-full text-left px-4 py-3 border-b border-mist last:border-0 hover:bg-cloud transition-colors cursor-pointer flex items-start gap-3 ${
+              activeId === conv._id ? "bg-cloud" : ""
             }`}
           >
-            <div className="w-10 h-10 rounded-full bg-green/10 flex items-center justify-center text-green text-sm font-semibold shrink-0">
+            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent text-sm font-semibold shrink-0">
               {getDisplayName(conv).charAt(0).toUpperCase()}
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
-                <p className={`text-sm truncate ${conv.hasUnread ? "font-semibold text-navy dark:text-white" : "font-medium text-gray-700 dark:text-gray-300"}`}>
+                <p className={`text-sm truncate ${conv.hasUnread ? "font-semibold text-text-deep" : "font-medium text-slate-custom"}`}>
                   {getDisplayName(conv)}
                 </p>
-                <span className="text-xs text-gray-400 shrink-0">
+                <span className="text-xs text-slate-custom shrink-0">
                   {formatRelativeTime(conv.lastMessageAt)}
                 </span>
               </div>
 
               {conv.lastMessagePreview && (
-                <p className={`text-xs truncate mt-0.5 ${conv.hasUnread ? "text-gray-700 dark:text-gray-300" : "text-gray-500 dark:text-gray-400"}`}>
+                <p className={`text-xs truncate mt-0.5 ${conv.hasUnread ? "text-text-deep" : "text-slate-custom"}`}>
                   {conv.lastMessagePreview}
                 </p>
               )}
 
               {conv.rfqTitle && (
-                <span className="inline-block text-xs bg-green/10 text-green px-2 py-0.5 rounded-full mt-1">
+                <span className="inline-block text-xs bg-accent/10 text-accent px-2 py-0.5 rounded-full mt-1">
                   RFQ: {conv.rfqTitle}
                 </span>
               )}
             </div>
 
             {conv.hasUnread && (
-              <div className="w-2.5 h-2.5 rounded-full bg-green shrink-0 mt-1.5" />
+              <div className="w-2.5 h-2.5 rounded-full bg-accent shrink-0 mt-1.5" />
             )}
           </button>
         ))}

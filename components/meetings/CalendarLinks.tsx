@@ -62,30 +62,31 @@ export function CalendarLinks({ subject, date, startTime, endTime, note, locatio
     URL.revokeObjectURL(url);
   };
 
+  const ghostLinkClass =
+    "text-xs font-medium border border-mist text-primary hover:bg-cloud rounded-lg px-2.5 py-1 transition-colors";
+
   return (
     <div className="flex items-center gap-2 flex-wrap">
-      <span className="text-xs text-gray-500 dark:text-gray-400">Add to:</span>
+      <span className="text-xs text-slate-custom">Add to:</span>
       <a
         href={googleUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs font-medium text-green hover:underline"
+        className={ghostLinkClass}
       >
         Google Calendar
       </a>
-      <span className="text-gray-300">|</span>
       <a
         href={outlookUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs font-medium text-green hover:underline"
+        className={ghostLinkClass}
       >
         Outlook
       </a>
-      <span className="text-gray-300">|</span>
       <button
         onClick={handleIcs}
-        className="text-xs font-medium text-green hover:underline"
+        className={ghostLinkClass}
       >
         Download .ics
       </button>

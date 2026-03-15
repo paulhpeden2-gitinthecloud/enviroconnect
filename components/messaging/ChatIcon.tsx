@@ -10,7 +10,7 @@ export function ChatIcon({ userId }: { userId: Id<"users"> }) {
   return (
     <Link
       href="/messages"
-      className="relative p-2 rounded-lg text-gray-200 hover:text-white hover:bg-white/10 transition-colors"
+      className="relative p-2 rounded-lg text-slate-custom hover:text-primary hover:bg-cloud transition-colors"
       aria-label="Messages"
     >
       <svg
@@ -28,7 +28,7 @@ export function ChatIcon({ userId }: { userId: Id<"users"> }) {
         />
       </svg>
       {(unreadCount ?? 0) > 0 && (
-        <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+        <span className="absolute -top-0.5 -right-0.5 bg-accent text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
           {unreadCount! > 9 ? "9+" : unreadCount}
         </span>
       )}

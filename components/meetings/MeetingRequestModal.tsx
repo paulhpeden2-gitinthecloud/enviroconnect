@@ -15,6 +15,9 @@ interface MeetingRequestModalProps {
 
 const VIDEO_PLATFORMS = ["Microsoft Teams", "Zoom", "Google Meet"] as const;
 
+const inputClass =
+  "w-full bg-surface border border-mist rounded-md px-3 py-2 text-sm text-deep placeholder:text-slate-custom focus:outline-none focus:border-primary focus:ring-2 focus:ring-focus-ring/40";
+
 export function MeetingRequestModal({
   requesterId,
   recipientId,
@@ -78,13 +81,17 @@ export function MeetingRequestModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white dark:bg-navy-light rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-cream-dark">
-          <h2 className="text-lg font-semibold text-navy dark:text-cream">
+      <div className="fixed inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-surface border border-mist rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-mist">
+          <h2 className="text-lg font-semibold text-deep">
             Schedule Meeting
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <button
+            onClick={onClose}
+            className="text-slate-custom hover:text-primary transition-colors"
+            aria-label="Close modal"
+          >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -92,23 +99,23 @@ export function MeetingRequestModal({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Request a meeting with <span className="font-medium text-navy dark:text-cream">{recipientName}</span>
+          <p className="text-sm text-slate-custom">
+            Request a meeting with <span className="font-medium text-deep">{recipientName}</span>
           </p>
 
           <div>
-            <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Subject *</label>
+            <label className="block text-sm font-medium text-deep mb-1">Subject *</label>
             <input
               type="text"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="e.g., Discuss stormwater compliance"
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-navy dark:text-cream mb-2">Meeting Type</label>
+            <label className="block text-sm font-medium text-deep mb-2">Meeting Type</label>
             <div className="flex gap-3">
               {(["phone", "video", "in_person"] as const).map((type) => (
                 <label key={type} className="flex items-center gap-1.5 cursor-pointer">
@@ -118,9 +125,9 @@ export function MeetingRequestModal({
                     value={type}
                     checked={meetingType === type}
                     onChange={() => { setMeetingType(type); setLocationDetail(""); }}
-                    className="accent-green"
+                    className="accent-accent"
                   />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                  <span className="text-sm text-slate-custom">
                     {type === "phone" ? "Phone" : type === "video" ? "Video" : "In Person"}
                   </span>
                 </label>
@@ -130,24 +137,24 @@ export function MeetingRequestModal({
 
           {meetingType === "phone" && (
             <div>
-              <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Phone Number *</label>
+              <label className="block text-sm font-medium text-deep mb-1">Phone Number *</label>
               <input
                 type="tel"
                 value={locationDetail}
                 onChange={(e) => setLocationDetail(e.target.value)}
                 placeholder="e.g., (206) 555-0123"
-                className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+                className={inputClass}
               />
             </div>
           )}
 
           {meetingType === "video" && (
             <div>
-              <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Video Platform *</label>
+              <label className="block text-sm font-medium text-deep mb-1">Video Platform *</label>
               <select
                 value={locationDetail}
                 onChange={(e) => setLocationDetail(e.target.value)}
-                className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+                className={inputClass}
               >
                 <option value="">Select platform...</option>
                 {VIDEO_PLATFORMS.map((p) => (
@@ -159,49 +166,49 @@ export function MeetingRequestModal({
 
           {meetingType === "in_person" && (
             <div>
-              <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Location / Address *</label>
+              <label className="block text-sm font-medium text-deep mb-1">Location / Address *</label>
               <input
                 type="text"
                 value={locationDetail}
                 onChange={(e) => setLocationDetail(e.target.value)}
                 placeholder="e.g., 123 Main St, Seattle, WA"
-                className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+                className={inputClass}
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-navy dark:text-cream mb-2">
+            <label className="block text-sm font-medium text-deep mb-2">
               Proposed Times (up to 3) *
             </label>
             <TimeSlotPicker slots={slots} onChange={setSlots} />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Note (optional)</label>
+            <label className="block text-sm font-medium text-deep mb-1">Note (optional)</label>
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
               rows={3}
               placeholder="Any additional context..."
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green resize-none"
+              className={`${inputClass} resize-none`}
             />
           </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {error && <p className="text-sm text-danger">{error}</p>}
 
           <div className="flex justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-cream dark:hover:bg-navy rounded-lg transition-colors"
+              className="px-4 py-2 text-sm text-slate-custom hover:bg-cloud rounded-lg transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 text-sm font-medium bg-green hover:bg-green-light text-white rounded-lg transition-colors disabled:opacity-50"
+              className="px-5 py-2 text-sm font-medium bg-accent hover:bg-accent-hover text-white rounded-lg transition-colors disabled:opacity-50"
             >
               {submitting ? "Sending..." : "Send Request"}
             </button>

@@ -60,18 +60,18 @@ export function NewMessageModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white dark:bg-navy-light rounded-xl shadow-xl w-full max-w-lg">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-cream-dark">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-surface border border-mist rounded-lg shadow-lg w-full max-w-lg">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-mist">
           <h3
-            className="text-lg font-semibold text-navy dark:text-white"
+            className="text-lg font-semibold text-text-deep"
             style={{ fontFamily: "var(--font-heading)" }}
           >
             New Message
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
+            className="text-slate-custom hover:text-text-deep transition-colors cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -81,7 +81,7 @@ export function NewMessageModal({
 
         <div className="p-5 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-text-deep mb-1">
               To
             </label>
             <UserSearch
@@ -94,7 +94,7 @@ export function NewMessageModal({
 
           {selectedUsers.length > 1 && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-text-deep mb-1">
                 Group Name (optional)
               </label>
               <input
@@ -102,13 +102,13 @@ export function NewMessageModal({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g., Stormwater Project Team"
-                className="w-full text-sm border border-cream-dark rounded-lg px-3 py-2 bg-white dark:bg-navy dark:border-navy-light dark:text-white focus:outline-none focus:ring-2 focus:ring-green/30"
+                className="w-full text-sm border border-mist rounded-md px-3 py-2 bg-surface text-text-deep focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-[#93C5FD]/40"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-text-deep mb-1">
               Message
             </label>
             <textarea
@@ -116,7 +116,7 @@ export function NewMessageModal({
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type your message..."
               rows={3}
-              className="w-full text-sm border border-cream-dark rounded-lg px-3 py-2 bg-white dark:bg-navy dark:border-navy-light dark:text-white focus:outline-none focus:ring-2 focus:ring-green/30 resize-none"
+              className="w-full text-sm border border-mist rounded-md px-3 py-2 bg-surface text-text-deep focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-[#93C5FD]/40 resize-none"
             />
           </div>
 
@@ -125,14 +125,14 @@ export function NewMessageModal({
           <div className="flex justify-end gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors cursor-pointer"
+              className="px-4 py-2 text-sm text-slate-custom hover:text-text-deep transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               onClick={handleSend}
               disabled={sending}
-              className="px-4 py-2 bg-green text-white text-sm font-medium rounded-lg hover:bg-green-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {sending ? "Sending..." : "Send"}
             </button>

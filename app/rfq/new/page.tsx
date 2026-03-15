@@ -11,13 +11,13 @@ export default function CreateRfqPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-cream">
+        <main className="min-h-screen bg-cloud">
           <div className="max-w-3xl mx-auto px-4 py-10 animate-pulse">
-            <div className="h-8 bg-cream-dark rounded w-48 mb-8" />
+            <div className="h-8 bg-mist rounded w-48 mb-8" />
             <div className="space-y-6">
-              <div className="h-10 bg-cream-dark rounded" />
-              <div className="h-32 bg-cream-dark rounded" />
-              <div className="h-10 bg-cream-dark rounded w-1/2" />
+              <div className="h-10 bg-mist rounded" />
+              <div className="h-32 bg-mist rounded" />
+              <div className="h-10 bg-mist rounded w-1/2" />
             </div>
           </div>
         </main>
@@ -109,15 +109,20 @@ function CreateRfqContent() {
     }
   };
 
+  const inputClass =
+    "w-full bg-surface border border-mist rounded-md px-3 py-2 text-sm text-text-deep placeholder:text-slate-custom focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-focus-ring/40";
+  const labelClass = "block text-sm font-semibold text-text-deep mb-2";
+  const cardClass = "bg-surface border border-mist rounded-lg p-6 shadow-md";
+
   if (!isLoaded || !dbUser) {
     return (
-      <main className="min-h-screen bg-cream">
+      <main className="min-h-screen bg-cloud">
         <div className="max-w-3xl mx-auto px-4 py-10 animate-pulse">
-          <div className="h-8 bg-cream-dark rounded w-48 mb-8" />
+          <div className="h-8 bg-mist rounded w-48 mb-8" />
           <div className="space-y-6">
-            <div className="h-10 bg-cream-dark rounded" />
-            <div className="h-32 bg-cream-dark rounded" />
-            <div className="h-10 bg-cream-dark rounded w-1/2" />
+            <div className="h-10 bg-mist rounded" />
+            <div className="h-32 bg-mist rounded" />
+            <div className="h-10 bg-mist rounded w-1/2" />
           </div>
         </div>
       </main>
@@ -126,10 +131,10 @@ function CreateRfqContent() {
 
   if (dbUser.role !== "facility_manager") {
     return (
-      <main className="min-h-screen bg-cream flex items-center justify-center">
+      <main className="min-h-screen bg-cloud flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 mb-4">Only facility managers can post RFQs.</p>
-          <Link href="/rfq" className="text-navy font-medium underline hover:no-underline">
+          <p className="text-slate-custom mb-4">Only facility managers can post RFQs.</p>
+          <Link href="/rfq" className="text-primary-light font-medium underline hover:no-underline">
             Browse RFQs
           </Link>
         </div>
@@ -138,11 +143,11 @@ function CreateRfqContent() {
   }
 
   return (
-    <main className="min-h-screen bg-cream">
-      <div className="bg-navy text-white py-8 px-4">
+    <main className="min-h-screen bg-cloud">
+      <div className="bg-primary text-white py-8 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-2xl font-bold">Post a Request for Quote</h1>
-          <p className="text-gray-300 text-sm mt-1">
+          <p className="text-white/70 text-sm mt-1">
             Describe what you need — matching vendors will be notified automatically
           </p>
         </div>
@@ -150,34 +155,34 @@ function CreateRfqContent() {
 
       <div className="max-w-3xl mx-auto px-4 py-10 space-y-8">
         {/* Title */}
-        <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-          <label className="block text-sm font-semibold text-navy mb-2">Title *</label>
+        <div className={cardClass}>
+          <label className={labelClass}>Title *</label>
           <input
             type="text"
             value={form.title}
             onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
             placeholder="e.g. Need SPCC Plan Update for Tacoma Facility"
-            className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-green/50"
+            className={inputClass}
           />
         </div>
 
         {/* Description */}
-        <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-          <label className="block text-sm font-semibold text-navy mb-2">Description *</label>
+        <div className={cardClass}>
+          <label className={labelClass}>Description *</label>
           <textarea
             value={form.description}
             onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
             placeholder="Describe the work you need done, including scope, location details, and any relevant background..."
             rows={5}
             maxLength={2000}
-            className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-green/50 resize-vertical"
+            className={`${inputClass} resize-vertical`}
           />
-          <p className="text-xs text-gray-400 mt-1">{form.description.length}/2000</p>
+          <p className="text-xs text-slate-custom mt-1">{form.description.length}/2000</p>
         </div>
 
         {/* Services */}
-        <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-          <label className="block text-sm font-semibold text-navy mb-3">Services Needed *</label>
+        <div className={cardClass}>
+          <label className={labelClass}>Services Needed *</label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {SERVICE_TYPES.map((s) => (
               <label key={s} className="flex items-center gap-2 text-sm cursor-pointer">
@@ -185,22 +190,22 @@ function CreateRfqContent() {
                   type="checkbox"
                   checked={form.services.includes(s)}
                   onChange={() => toggleService(s)}
-                  className="rounded border-cream-dark text-green focus:ring-green"
+                  className="rounded border-mist text-accent focus:ring-accent"
                 />
-                <span className="text-gray-700 dark:text-gray-300">{s}</span>
+                <span className="text-text-deep">{s}</span>
               </label>
             ))}
           </div>
         </div>
 
         {/* Service Area, Budget, Deadline, Timeline */}
-        <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className={`${cardClass} grid grid-cols-1 sm:grid-cols-2 gap-4`}>
           <div>
-            <label className="block text-sm font-semibold text-navy mb-2">Service Area *</label>
+            <label className={labelClass}>Service Area *</label>
             <select
               value={form.serviceArea}
               onChange={(e) => setForm((prev) => ({ ...prev, serviceArea: e.target.value }))}
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white"
+              className={inputClass}
             >
               <option value="">Select region</option>
               {SERVICE_AREAS.map((a) => (
@@ -209,11 +214,11 @@ function CreateRfqContent() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-navy mb-2">Budget Range</label>
+            <label className={labelClass}>Budget Range</label>
             <select
               value={form.budgetRange}
               onChange={(e) => setForm((prev) => ({ ...prev, budgetRange: e.target.value }))}
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white"
+              className={inputClass}
             >
               <option value="">Prefer not to say</option>
               {BUDGET_RANGES.map((b) => (
@@ -222,21 +227,21 @@ function CreateRfqContent() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-navy mb-2">Proposal Deadline *</label>
+            <label className={labelClass}>Proposal Deadline *</label>
             <input
               type="date"
               value={form.deadline}
               onChange={(e) => setForm((prev) => ({ ...prev, deadline: e.target.value }))}
               min={new Date().toISOString().split("T")[0]}
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-navy mb-2">Work Timeline *</label>
+            <label className={labelClass}>Work Timeline *</label>
             <select
               value={form.timeline}
               onChange={(e) => setForm((prev) => ({ ...prev, timeline: e.target.value }))}
-              className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white"
+              className={inputClass}
             >
               <option value="">Select timeline</option>
               {TIMELINE_OPTIONS.map((t) => (
@@ -247,23 +252,23 @@ function CreateRfqContent() {
         </div>
 
         {/* Additional Requirements */}
-        <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-          <label className="block text-sm font-semibold text-navy mb-2">Additional Requirements</label>
+        <div className={cardClass}>
+          <label className={labelClass}>Additional Requirements</label>
           <textarea
             value={form.requirements}
             onChange={(e) => setForm((prev) => ({ ...prev, requirements: e.target.value }))}
             placeholder="e.g. Must carry $2M general liability insurance, HAZWOPER certification required, bonding requirements..."
             rows={3}
             maxLength={1000}
-            className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-green/50 resize-vertical"
+            className={`${inputClass} resize-vertical`}
           />
-          <p className="text-xs text-gray-400 mt-1">{form.requirements.length}/1000</p>
+          <p className="text-xs text-slate-custom mt-1">{form.requirements.length}/1000</p>
         </div>
 
         {/* Invite Specific Vendors (optional) */}
-        <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-          <label className="block text-sm font-semibold text-navy mb-2">Invite Specific Vendors (optional)</label>
-          <p className="text-xs text-gray-500 mb-3">
+        <div className={cardClass}>
+          <label className={labelClass}>Invite Specific Vendors (optional)</label>
+          <p className="text-xs text-slate-custom mb-3">
             All matching vendors will be notified automatically. Use this to additionally invite specific vendors.
           </p>
           <input
@@ -271,10 +276,10 @@ function CreateRfqContent() {
             value={vendorSearch}
             onChange={(e) => setVendorSearch(e.target.value)}
             placeholder="Search vendors by name..."
-            className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-green/50 mb-2"
+            className={`${inputClass} mb-2`}
           />
           {vendorSearch && filteredVendors && filteredVendors.length > 0 && (
-            <div className="border border-cream-dark rounded-lg max-h-40 overflow-y-auto">
+            <div className="border border-mist rounded-md max-h-40 overflow-y-auto bg-surface">
               {filteredVendors.slice(0, 5).map((v) => (
                 <button
                   key={v._id}
@@ -282,7 +287,7 @@ function CreateRfqContent() {
                     setInvitedVendorIds((prev) => [...prev, v._id]);
                     setVendorSearch("");
                   }}
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-cream dark:hover:bg-navy transition-colors"
+                  className="w-full text-left px-3 py-2 text-sm text-text-deep hover:bg-cloud transition-colors"
                 >
                   {v.companyName}
                 </button>
@@ -296,12 +301,12 @@ function CreateRfqContent() {
                 return (
                   <span
                     key={id}
-                    className="inline-flex items-center gap-1 text-xs bg-green/10 text-green font-medium px-2.5 py-1 rounded-full"
+                    className="inline-flex items-center gap-1 text-xs bg-accent-surface text-accent font-medium px-2.5 py-1 rounded-full"
                   >
                     {vendor?.companyName ?? "Vendor"}
                     <button
                       onClick={() => setInvitedVendorIds((prev) => prev.filter((i) => i !== id))}
-                      className="text-green hover:text-red-500"
+                      className="text-accent hover:text-danger"
                     >
                       ×
                     </button>
@@ -313,18 +318,18 @@ function CreateRfqContent() {
         </div>
 
         {/* Submit */}
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p className="text-danger text-sm">{error}</p>}
         <div className="flex gap-3">
           <button
             onClick={handleSubmit}
             disabled={saving}
-            className="bg-green hover:bg-green-light text-white font-semibold px-6 py-3 rounded-lg transition-colors disabled:opacity-50"
+            className="bg-accent hover:bg-accent-hover text-white font-semibold px-6 py-3 rounded-lg transition-colors disabled:opacity-50"
           >
             {saving ? "Posting..." : "Post RFQ"}
           </button>
           <Link
             href="/rfq"
-            className="border border-cream-dark text-navy hover:bg-cream px-6 py-3 rounded-lg transition-colors text-center font-medium dark:text-gray-300 dark:border-navy-light dark:hover:bg-navy"
+            className="border border-mist text-text-deep hover:bg-cloud px-6 py-3 rounded-lg transition-colors text-center font-medium"
           >
             Cancel
           </Link>

@@ -16,11 +16,11 @@ interface MeetingCardProps {
 
 const TYPE_LABELS = { phone: "Phone", video: "Video", in_person: "In Person" };
 const STATUS_STYLES: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200",
-  counterproposed: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200",
-  confirmed: "bg-green/15 text-green dark:text-green-300",
-  declined: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200",
-  expired: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+  pending: "bg-warning-surface text-warning",
+  counterproposed: "bg-blue-50 text-blue-700",
+  confirmed: "bg-accent-surface text-accent",
+  declined: "bg-danger-surface text-danger",
+  expired: "bg-mist text-slate-custom",
 };
 
 function formatSlotDate(dateMs: number): string {
@@ -91,39 +91,39 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
   };
 
   return (
-    <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-5 space-y-3">
+    <div className="bg-surface border border-mist rounded-lg shadow-md p-5 space-y-3">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            <h3 className="text-sm font-semibold text-navy dark:text-cream truncate">
+            <h3 className="text-sm font-semibold text-deep truncate">
               {meeting.subject}
             </h3>
             <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_STYLES[meeting.status]}`}>
               {meeting.status.charAt(0).toUpperCase() + meeting.status.slice(1)}
             </span>
-            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-cream-dark/50 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-cloud text-slate-custom">
               {TYPE_LABELS[meeting.meetingType]}
             </span>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-xs text-slate-custom">
             {isRequester ? "To" : "From"}: {otherParty?.name} ({otherParty?.company})
           </p>
         </div>
-        <span className="text-xs text-gray-400 shrink-0">
+        <span className="text-xs text-slate-custom shrink-0">
           {new Date(meeting.createdAt).toLocaleDateString()}
         </span>
       </div>
 
       {/* Note */}
       {meeting.note && (
-        <p className="text-sm text-gray-600 dark:text-gray-300">{meeting.note}</p>
+        <p className="text-sm text-slate-custom">{meeting.note}</p>
       )}
 
       {/* Location detail */}
       {meeting.locationDetail && (
-        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-          <span className="font-medium text-navy dark:text-cream">
+        <div className="flex items-center gap-2 text-sm text-slate-custom">
+          <span className="font-medium text-primary">
             {meeting.meetingType === "phone" ? "Phone:" : meeting.meetingType === "video" ? "Platform:" : "Location:"}
           </span>
           {meeting.locationDetail}
@@ -132,8 +132,8 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
 
       {/* Confirmed slot */}
       {meeting.status === "confirmed" && meeting.confirmedSlot && (
-        <div className="bg-green/5 dark:bg-green/10 rounded-lg p-3 space-y-2">
-          <p className="text-sm font-medium text-green">
+        <div className="bg-accent-surface rounded-lg p-3 space-y-2">
+          <p className="text-sm font-medium text-accent">
             {formatSlotDate(meeting.confirmedSlot.date)} &middot; {meeting.confirmedSlot.startTime} – {meeting.confirmedSlot.endTime}
           </p>
           <CalendarLinks
@@ -149,14 +149,14 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
             <div className="mt-2">
               {meeting.meetingLink ? (
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs text-gray-500 dark:text-gray-400">Link:</span>
-                  <a href={meeting.meetingLink} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-green hover:underline break-all">
+                  <span className="text-xs text-slate-custom">Link:</span>
+                  <a href={meeting.meetingLink} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-accent hover:underline break-all">
                     {meeting.meetingLink}
                   </a>
-                  <button onClick={() => { setEditingLink(true); setLinkValue(meeting.meetingLink ?? ""); }} className="text-xs text-gray-400 hover:text-gray-600">Edit</button>
+                  <button onClick={() => { setEditingLink(true); setLinkValue(meeting.meetingLink ?? ""); }} className="text-xs text-slate-custom hover:text-primary">Edit</button>
                 </div>
               ) : !editingLink ? (
-                <button onClick={() => setEditingLink(true)} className="text-xs font-medium text-green hover:underline">
+                <button onClick={() => setEditingLink(true)} className="text-xs font-medium text-accent hover:underline">
                   + Add meeting link
                 </button>
               ) : null}
@@ -167,7 +167,7 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
                     value={linkValue}
                     onChange={(e) => setLinkValue(e.target.value)}
                     placeholder="Paste meeting link..."
-                    className="flex-1 border border-cream-dark rounded-lg px-2 py-1 text-xs bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+                    className="flex-1 bg-surface border border-mist rounded-md px-2 py-1 text-xs text-deep focus:outline-none focus:border-primary focus:ring-2 focus:ring-focus-ring/40"
                   />
                   <button
                     onClick={async () => {
@@ -175,11 +175,11 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
                       await updateMeetingLink({ meetingRequestId: meeting._id, userId: currentUserId, meetingLink: linkValue.trim() });
                       setEditingLink(false);
                     }}
-                    className="text-xs font-medium text-white bg-green px-3 py-1 rounded-lg hover:bg-green-light"
+                    className="text-xs font-medium text-white bg-accent px-3 py-1 rounded-lg hover:bg-accent-hover transition-colors"
                   >
                     Save
                   </button>
-                  <button onClick={() => setEditingLink(false)} className="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+                  <button onClick={() => setEditingLink(false)} className="text-xs text-slate-custom hover:text-primary">Cancel</button>
                 </div>
               )}
             </div>
@@ -190,18 +190,18 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
       {/* Proposed/counter slots for action */}
       {needsMyAction && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+          <p className="text-xs font-medium text-slate-custom uppercase tracking-wide">
             {meeting.status === "counterproposed" ? "Suggested times:" : "Proposed times:"}
           </p>
           {slotsToShow.map((slot, i) => (
-            <div key={i} className="flex items-center justify-between gap-2 bg-cream dark:bg-navy rounded-lg px-3 py-2">
-              <span className="text-sm text-navy dark:text-cream">
+            <div key={i} className="flex items-center justify-between gap-2 bg-cloud rounded-lg px-3 py-2">
+              <span className="text-sm text-deep">
                 {formatSlotDate(slot.date)} &middot; {slot.startTime} – {slot.endTime}
               </span>
               <button
                 onClick={() => handleAccept(slot)}
                 disabled={submitting}
-                className="text-xs font-medium text-white bg-green hover:bg-green-light px-3 py-1 rounded-lg transition-colors disabled:opacity-50"
+                className="text-xs font-medium text-white bg-accent hover:bg-accent-hover px-3 py-1 rounded-lg transition-colors disabled:opacity-50"
               >
                 Accept
               </button>
@@ -213,11 +213,11 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
       {/* Slots display (non-actionable) */}
       {!needsMyAction && meeting.status !== "confirmed" && (
         <div className="space-y-1">
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+          <p className="text-xs font-medium text-slate-custom uppercase tracking-wide">
             {meeting.status === "counterproposed" ? "Your suggested times:" : "Proposed times:"}
           </p>
           {slotsToShow.map((slot, i) => (
-            <p key={i} className="text-sm text-gray-600 dark:text-gray-300">
+            <p key={i} className="text-sm text-slate-custom">
               {formatSlotDate(slot.date)} &middot; {slot.startTime} – {slot.endTime}
             </p>
           ))}
@@ -226,38 +226,38 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
 
       {/* Action buttons for recipient on pending */}
       {meeting.status === "pending" && !isRequester && (
-        <div className="flex items-center gap-3 pt-2 border-t border-cream-dark">
+        <div className="flex items-center gap-3 pt-2 border-t border-mist">
           {!showCounter ? (
             <>
               <button
                 onClick={() => setShowCounter(true)}
-                className="text-sm font-medium text-navy dark:text-cream hover:underline"
+                className="text-sm font-medium text-primary hover:underline"
               >
                 Suggest Other Times
               </button>
               <button
                 onClick={handleDecline}
                 disabled={submitting}
-                className="text-sm font-medium text-red-500 hover:underline disabled:opacity-50"
+                className="text-sm font-medium text-danger hover:underline disabled:opacity-50"
               >
                 Decline
               </button>
             </>
           ) : (
             <div className="w-full space-y-3">
-              <p className="text-sm font-medium text-navy dark:text-cream">Suggest alternative times:</p>
+              <p className="text-sm font-medium text-deep">Suggest alternative times:</p>
               <TimeSlotPicker slots={counterSlots} onChange={setCounterSlots} />
               <div className="flex gap-3">
                 <button
                   onClick={handleCounter}
                   disabled={submitting}
-                  className="text-sm font-medium bg-navy hover:bg-navy-light text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                  className="text-sm font-medium bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
                 >
                   {submitting ? "Sending..." : "Send Counter-Proposal"}
                 </button>
                 <button
                   onClick={() => setShowCounter(false)}
-                  className="text-sm text-gray-500 hover:underline"
+                  className="text-sm text-slate-custom hover:underline"
                 >
                   Cancel
                 </button>
@@ -269,11 +269,11 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
 
       {/* Decline button for requester on counterproposed */}
       {meeting.status === "counterproposed" && isRequester && (
-        <div className="pt-2 border-t border-cream-dark">
+        <div className="pt-2 border-t border-mist">
           <button
             onClick={handleDecline}
             disabled={submitting}
-            className="text-sm font-medium text-red-500 hover:underline disabled:opacity-50"
+            className="text-sm font-medium text-danger hover:underline disabled:opacity-50"
           >
             Decline Meeting
           </button>

@@ -75,7 +75,7 @@ export function ChatInput({ conversationId, senderId }: ChatInputProps) {
   };
 
   return (
-    <div className="border-t border-cream-dark px-4 py-3">
+    <div className="border-t border-mist px-4 py-3 bg-surface">
       {showAttach && (
         <div className="mb-3">
           <PdfUpload
@@ -92,8 +92,8 @@ export function ChatInput({ conversationId, senderId }: ChatInputProps) {
           onClick={() => setShowAttach(!showAttach)}
           className={`p-2 rounded-lg transition-colors cursor-pointer ${
             showAttach
-              ? "text-green bg-green/10"
-              : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-cream dark:hover:bg-navy"
+              ? "text-accent bg-accent/10"
+              : "text-slate-custom hover:text-primary hover:bg-cloud"
           }`}
           aria-label="Attach file"
         >
@@ -109,7 +109,7 @@ export function ChatInput({ conversationId, senderId }: ChatInputProps) {
           onKeyDown={handleKeyDown}
           placeholder="Type a message..."
           rows={1}
-          className="flex-1 text-sm border border-cream-dark rounded-xl px-4 py-2.5 bg-white dark:bg-navy dark:border-navy-light dark:text-white focus:outline-none focus:ring-2 focus:ring-green/30 resize-none max-h-32"
+          className="flex-1 text-sm border border-mist rounded-md px-4 py-2.5 bg-surface text-text-deep focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-[#93C5FD]/40 resize-none max-h-32"
           style={{ minHeight: "42px" }}
         />
 
@@ -117,7 +117,7 @@ export function ChatInput({ conversationId, senderId }: ChatInputProps) {
           type="button"
           onClick={handleSend}
           disabled={sending || (!content.trim() && files.length === 0)}
-          className="p-2.5 bg-green text-white rounded-xl hover:bg-green-light transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          className="p-2.5 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           aria-label="Send message"
         >
           {sending ? (
@@ -133,7 +133,7 @@ export function ChatInput({ conversationId, senderId }: ChatInputProps) {
         </button>
       </div>
 
-      <p className="text-[10px] text-gray-400 mt-1 px-2">
+      <p className="text-[10px] text-slate-custom mt-1 px-2">
         Enter to send · Shift+Enter for new line
       </p>
     </div>

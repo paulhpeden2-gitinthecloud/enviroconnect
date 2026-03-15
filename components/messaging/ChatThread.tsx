@@ -70,10 +70,10 @@ export function ChatThread({
       <div className="flex-1 p-4 space-y-4">
         {[1, 2, 3].map((i) => (
           <div key={i} className="animate-pulse flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-cream-dark dark:bg-navy" />
+            <div className="w-8 h-8 rounded-full bg-mist" />
             <div className="flex-1 space-y-1">
-              <div className="h-3 bg-cream-dark dark:bg-navy rounded w-24" />
-              <div className="h-4 bg-cream-dark dark:bg-navy rounded w-3/4" />
+              <div className="h-3 bg-mist rounded w-24" />
+              <div className="h-4 bg-mist rounded w-3/4" />
             </div>
           </div>
         ))}
@@ -99,7 +99,7 @@ export function ChatThread({
           <div key={msg._id}>
             {showDate && (
               <div className="flex items-center justify-center py-3">
-                <span className="text-xs text-gray-400 bg-cream dark:bg-navy px-3 py-1 rounded-full">
+                <span className="text-xs text-slate-custom bg-cloud px-3 py-1 rounded-full">
                   {dateStr}
                 </span>
               </div>
@@ -110,16 +110,16 @@ export function ChatThread({
             >
               <div className={`max-w-[75%] ${isMe ? "items-end" : "items-start"}`}>
                 {showSender && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5 px-3">
+                  <p className="text-xs text-slate-custom mb-0.5 px-3">
                     {msg.senderName}
                   </p>
                 )}
 
                 <div
-                  className={`rounded-2xl px-4 py-2 ${
+                  className={`rounded-lg px-4 py-2 ${
                     isMe
-                      ? "bg-green text-white rounded-br-md"
-                      : "bg-white dark:bg-navy border border-cream-dark dark:border-navy-light text-navy dark:text-white rounded-bl-md"
+                      ? "bg-accent text-white rounded-br-md"
+                      : "bg-cloud text-text-deep rounded-bl-md"
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">
@@ -137,7 +137,7 @@ export function ChatThread({
                           className={`flex items-center gap-2 text-xs px-2 py-1 rounded-lg cursor-pointer transition-colors ${
                             isMe
                               ? "bg-white/20 hover:bg-white/30 text-white"
-                              : "bg-cream dark:bg-navy-light hover:bg-cream-dark dark:hover:bg-navy"
+                              : "bg-surface border border-mist hover:bg-mist/40 text-text-deep"
                           }`}
                         >
                           <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -152,7 +152,7 @@ export function ChatThread({
                 </div>
 
                 <p
-                  className={`text-[10px] text-gray-400 mt-0.5 px-2 ${
+                  className={`text-[10px] text-slate-custom mt-0.5 px-2 ${
                     isMe ? "text-right" : "text-left"
                   }`}
                 >

@@ -12,15 +12,15 @@ import { PdfPreviewModal } from "@/components/shared/PdfPreviewModal";
 import { MeetingRequestModal } from "@/components/meetings/MeetingRequestModal";
 
 function timelineColor(timeline: string) {
-  if (timeline.includes("Urgent")) return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300";
-  if (timeline.includes("1–3")) return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300";
-  return "bg-green/10 text-green";
+  if (timeline.includes("Urgent")) return "bg-danger-surface text-danger";
+  if (timeline.includes("1–3")) return "bg-warning-surface text-warning";
+  return "bg-accent-surface text-accent";
 }
 
 function statusColor(status: string) {
-  if (status === "open") return "bg-green/10 text-green";
-  if (status === "awarded") return "bg-navy/10 text-navy dark:bg-white/10 dark:text-white";
-  return "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300";
+  if (status === "open") return "bg-accent-surface text-accent";
+  if (status === "awarded") return "bg-cloud text-primary-light border border-mist";
+  return "bg-danger-surface text-danger";
 }
 
 export default function RfqDetailPage() {
@@ -78,7 +78,6 @@ export default function RfqDetailPage() {
     setSubmitting(true);
     setError("");
     try {
-      // Upload all files first
       const attachments: { storageId: Id<"_storage">; fileName: string; fileSize: number }[] = [];
       for (const uf of uploadFiles) {
         const uploadUrl = await generateUploadUrl();
@@ -142,20 +141,24 @@ export default function RfqDetailPage() {
     }
   };
 
+  const inputClass =
+    "w-full bg-surface border border-mist rounded-md px-3 py-2 text-sm text-text-deep placeholder:text-slate-custom focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-focus-ring/40";
+  const cardClass = "bg-surface border border-mist rounded-lg p-6 shadow-md";
+
   if (rfq === undefined) {
     return (
-      <main className="min-h-screen bg-cream">
-        <div className="bg-navy text-white py-8 px-4">
+      <main className="min-h-screen bg-cloud">
+        <div className="bg-primary text-white py-8 px-4">
           <div className="max-w-4xl mx-auto animate-pulse">
             <div className="h-7 bg-white/20 rounded w-64 mb-2" />
             <div className="h-4 bg-white/20 rounded w-40" />
           </div>
         </div>
         <div className="max-w-4xl mx-auto px-4 py-10 space-y-6 animate-pulse">
-          <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6 space-y-4">
-            <div className="h-4 bg-cream-dark rounded w-full" />
-            <div className="h-4 bg-cream-dark rounded w-5/6" />
-            <div className="h-4 bg-cream-dark rounded w-2/3" />
+          <div className={`${cardClass} space-y-4`}>
+            <div className="h-4 bg-mist rounded w-full" />
+            <div className="h-4 bg-mist rounded w-5/6" />
+            <div className="h-4 bg-mist rounded w-2/3" />
           </div>
         </div>
       </main>
@@ -164,10 +167,10 @@ export default function RfqDetailPage() {
 
   if (!rfq) {
     return (
-      <main className="min-h-screen bg-cream flex items-center justify-center">
+      <main className="min-h-screen bg-cloud flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 mb-4">RFQ not found.</p>
-          <Link href="/rfq" className="text-navy font-medium underline hover:no-underline">
+          <p className="text-slate-custom mb-4">RFQ not found.</p>
+          <Link href="/rfq" className="text-primary-light font-medium underline hover:no-underline">
             Back to RFQ Board
           </Link>
         </div>
@@ -176,22 +179,22 @@ export default function RfqDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-cream">
-      <div className="bg-navy text-white py-8 px-4">
+    <main className="min-h-screen bg-cloud">
+      <div className="bg-primary text-white py-8 px-4">
         <div className="max-w-4xl mx-auto">
-          <Link href="/rfq" className="text-sm text-gray-300 hover:text-white mb-2 inline-block">
+          <Link href="/rfq" className="text-sm text-white/60 hover:text-white mb-2 inline-block">
             ← Back to RFQ Board
           </Link>
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <h1 className="text-2xl font-bold">{rfq.title}</h1>
-              <p className="text-gray-300 text-sm mt-1">{rfq.serviceArea}</p>
+              <p className="text-white/70 text-sm mt-1">{rfq.serviceArea}</p>
             </div>
             <div className="flex items-center gap-2">
-              <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusColor(rfq.status)}`}>
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded ${statusColor(rfq.status)}`}>
                 {rfq.status.charAt(0).toUpperCase() + rfq.status.slice(1)}
               </span>
-              <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${timelineColor(rfq.timeline)}`}>
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded ${timelineColor(rfq.timeline)}`}>
                 {rfq.timeline}
               </span>
             </div>
@@ -202,23 +205,26 @@ export default function RfqDetailPage() {
       <div className="max-w-4xl mx-auto px-4 py-10">
         <div className="grid md:grid-cols-3 gap-6">
           <div className="md:col-span-2 space-y-6">
-            <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-              <h2 className="text-lg font-semibold text-navy mb-3">Description</h2>
-              <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{rfq.description}</p>
+            <div className={cardClass}>
+              <h2 className="text-lg font-semibold text-text-deep mb-3">Description</h2>
+              <p className="text-sm text-slate-custom whitespace-pre-wrap">{rfq.description}</p>
             </div>
 
             {rfq.requirements && (
-              <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-                <h2 className="text-lg font-semibold text-navy mb-3">Additional Requirements</h2>
-                <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{rfq.requirements}</p>
+              <div className={cardClass}>
+                <h2 className="text-lg font-semibold text-text-deep mb-3">Additional Requirements</h2>
+                <p className="text-sm text-slate-custom whitespace-pre-wrap">{rfq.requirements}</p>
               </div>
             )}
 
-            <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-              <h2 className="text-lg font-semibold text-navy mb-3">Services Needed</h2>
+            <div className={cardClass}>
+              <h2 className="text-lg font-semibold text-text-deep mb-3">Services Needed</h2>
               <div className="flex flex-wrap gap-2">
                 {rfq.services.map((s) => (
-                  <span key={s} className="text-xs bg-green/10 text-green font-medium px-2.5 py-1 rounded-full">
+                  <span
+                    key={s}
+                    className="bg-cloud text-primary-light border border-mist text-xs rounded px-2 py-0.5"
+                  >
                     {s}
                   </span>
                 ))}
@@ -226,49 +232,49 @@ export default function RfqDetailPage() {
             </div>
 
             {isVendor && vendorProfile && rfq.status === "open" && !hasResponded && (
-              <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-8">
-                <h2 className="text-lg font-semibold text-navy dark:text-cream mb-5">Submit a Proposal</h2>
+              <div className={cardClass}>
+                <h2 className="text-lg font-semibold text-text-deep mb-5">Submit a Proposal</h2>
                 <div className="space-y-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message *</label>
+                    <label className="block text-sm font-medium text-text-deep mb-1">Message *</label>
                     <textarea
                       value={proposalForm.proposalText}
                       onChange={(e) => setProposalForm((prev) => ({ ...prev, proposalText: e.target.value }))}
                       placeholder="Brief cover note with your proposal..."
                       rows={4}
                       maxLength={2000}
-                      className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-green/50 resize-vertical"
+                      className={`${inputClass} resize-vertical`}
                     />
                   </div>
                   <PdfUpload files={uploadFiles} onFilesChange={setUploadFiles} />
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estimated Cost</label>
+                      <label className="block text-sm font-medium text-text-deep mb-1">Estimated Cost</label>
                       <input
                         type="text"
                         value={proposalForm.estimatedCost}
                         onChange={(e) => setProposalForm((prev) => ({ ...prev, estimatedCost: e.target.value }))}
                         placeholder="e.g. $8,500"
-                        className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-green/50"
+                        className={inputClass}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estimated Timeline</label>
+                      <label className="block text-sm font-medium text-text-deep mb-1">Estimated Timeline</label>
                       <input
                         type="text"
                         value={proposalForm.estimatedTimeline}
                         onChange={(e) => setProposalForm((prev) => ({ ...prev, estimatedTimeline: e.target.value }))}
                         placeholder="e.g. 2-3 weeks"
-                        className="w-full border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:border-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-green/50"
+                        className={inputClass}
                       />
                     </div>
                   </div>
-                  {error && <p className="text-red-600 text-sm">{error}</p>}
-                  {success && <p className="text-green text-sm font-medium">{success}</p>}
+                  {error && <p className="text-danger text-sm">{error}</p>}
+                  {success && <p className="text-accent text-sm font-medium">{success}</p>}
                   <button
                     onClick={handleSubmitProposal}
                     disabled={submitting}
-                    className="bg-green hover:bg-green-light text-white font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50"
+                    className="bg-accent hover:bg-accent-hover text-white font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50"
                   >
                     {submitting ? "Uploading & Submitting..." : "Submit Proposal"}
                   </button>
@@ -277,53 +283,59 @@ export default function RfqDetailPage() {
             )}
 
             {isVendor && hasResponded && (
-              <div className="bg-green/5 border border-green/20 rounded-xl p-6 text-center">
-                <p className="text-green font-medium">You have already submitted a proposal for this RFQ.</p>
+              <div className="bg-accent-surface border border-accent/20 rounded-lg p-6 text-center">
+                <p className="text-accent font-medium">You have already submitted a proposal for this RFQ.</p>
               </div>
             )}
 
             {isOwner && (
-              <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-                <h2 className="text-lg font-semibold text-navy mb-4">
+              <div className={cardClass}>
+                <h2 className="text-lg font-semibold text-text-deep mb-4">
                   Proposals ({responses?.length ?? 0})
                 </h2>
                 {responses === undefined && (
                   <div className="animate-pulse space-y-4">
-                    <div className="h-20 bg-cream-dark rounded" />
-                    <div className="h-20 bg-cream-dark rounded" />
+                    <div className="h-20 bg-mist rounded" />
+                    <div className="h-20 bg-mist rounded" />
                   </div>
                 )}
                 {responses?.length === 0 && (
-                  <p className="text-gray-500 text-sm">No proposals yet.</p>
+                  <p className="text-slate-custom text-sm">No proposals yet.</p>
                 )}
                 {responses && responses.length > 0 && (
                   <div className="space-y-4">
                     {responses.map((r) => (
-                      <div key={r._id} className="border border-cream-dark rounded-lg p-4">
+                      <div key={r._id} className="border border-mist rounded-lg p-4 bg-cloud">
                         <div className="flex items-start justify-between gap-3 mb-2">
                           <div>
                             <Link
                               href={`/directory/${r.vendorProfileId}`}
-                              className="font-semibold text-navy hover:underline"
+                              className="font-semibold text-primary-light hover:underline"
                             >
                               {r.vendorProfile?.companyName ?? "Unknown Vendor"}
                             </Link>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-slate-custom">
                               {new Date(r.createdAt).toLocaleDateString()}
                             </p>
                           </div>
-                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                            r.status === "accepted" ? "bg-green/10 text-green" :
-                            r.status === "declined" ? "bg-red-100 text-red-600" :
-                            "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                          <span className={`text-xs font-semibold px-2 py-0.5 rounded ${
+                            r.status === "accepted"
+                              ? "bg-accent-surface text-accent"
+                              : r.status === "declined"
+                              ? "bg-danger-surface text-danger"
+                              : "bg-cloud text-slate-custom border border-mist"
                           }`}>
                             {r.status.charAt(0).toUpperCase() + r.status.slice(1)}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap mb-3">{r.proposalText}</p>
-                        <div className="flex gap-4 text-sm text-gray-500 mb-3">
-                          {r.estimatedCost && <span>Cost: <strong className="text-navy dark:text-white">{r.estimatedCost}</strong></span>}
-                          {r.estimatedTimeline && <span>Timeline: <strong className="text-navy dark:text-white">{r.estimatedTimeline}</strong></span>}
+                        <p className="text-sm text-slate-custom whitespace-pre-wrap mb-3">{r.proposalText}</p>
+                        <div className="flex gap-4 text-sm text-slate-custom mb-3">
+                          {r.estimatedCost && (
+                            <span>Cost: <strong className="text-text-deep">{r.estimatedCost}</strong></span>
+                          )}
+                          {r.estimatedTimeline && (
+                            <span>Timeline: <strong className="text-text-deep">{r.estimatedTimeline}</strong></span>
+                          )}
                         </div>
                         {r.attachmentsWithUrls && r.attachmentsWithUrls.length > 0 && (
                           <div className="flex flex-wrap gap-2 mb-3">
@@ -333,12 +345,12 @@ export default function RfqDetailPage() {
                                 onClick={() =>
                                   a.url && setPreviewFile({ url: a.url, fileName: a.fileName })
                                 }
-                                className="flex items-center gap-2 bg-cream dark:bg-navy rounded-lg px-3 py-2 text-sm border border-cream-dark dark:border-navy-light hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200"
+                                className="flex items-center gap-2 bg-surface rounded-lg px-3 py-2 text-sm border border-mist hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200"
                               >
-                                <svg className="w-4 h-4 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <svg className="w-4 h-4 text-danger shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                   <path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H4zm7 1.5L16.5 9H12a1 1 0 01-1-1V3.5zM7 11h6a1 1 0 110 2H7a1 1 0 110-2zm0 3h4a1 1 0 110 2H7a1 1 0 110-2z" />
                                 </svg>
-                                <span className="text-navy dark:text-cream text-xs font-medium truncate max-w-[150px]">
+                                <span className="text-text-deep text-xs font-medium truncate max-w-[150px]">
                                   {a.fileName}
                                 </span>
                               </button>
@@ -350,13 +362,13 @@ export default function RfqDetailPage() {
                             <>
                               <button
                                 onClick={() => handleAccept(r._id)}
-                                className="text-sm bg-green hover:bg-green-light text-white px-4 py-1.5 rounded-lg transition-colors"
+                                className="text-sm bg-accent hover:bg-accent-hover text-white px-4 py-1.5 rounded-lg transition-colors"
                               >
                                 Accept
                               </button>
                               <button
                                 onClick={() => handleDecline(r._id)}
-                                className="text-sm border border-cream-dark text-gray-600 hover:bg-cream px-4 py-1.5 rounded-lg transition-colors dark:text-gray-300 dark:border-navy dark:hover:bg-navy"
+                                className="text-sm border border-mist text-slate-custom hover:bg-cloud px-4 py-1.5 rounded-lg transition-colors"
                               >
                                 Decline
                               </button>
@@ -368,7 +380,7 @@ export default function RfqDetailPage() {
                                 recipientId: r.vendorProfile!.userId,
                                 recipientName: r.vendorProfile!.companyName,
                               })}
-                              className="text-xs text-green hover:underline font-medium"
+                              className="text-xs text-accent hover:underline font-medium"
                             >
                               Schedule Meeting
                             </button>
@@ -383,28 +395,28 @@ export default function RfqDetailPage() {
           </div>
 
           <aside className="space-y-4">
-            <div className="bg-white dark:bg-navy-light rounded-xl border border-cream-dark p-6">
-              <h2 className="text-sm font-semibold text-navy mb-3">Details</h2>
+            <div className={cardClass}>
+              <h2 className="text-sm font-semibold text-text-deep mb-3">Details</h2>
               <dl className="space-y-3 text-sm">
                 <div>
-                  <dt className="text-gray-500 text-xs uppercase tracking-wide">Proposal Deadline</dt>
-                  <dd className="text-navy dark:text-white font-medium">
+                  <dt className="text-slate-custom text-xs uppercase tracking-wide">Proposal Deadline</dt>
+                  <dd className="text-text-deep font-medium">
                     {new Date(rfq.deadline).toLocaleDateString()}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-gray-500 text-xs uppercase tracking-wide">Work Timeline</dt>
-                  <dd className="text-navy dark:text-white font-medium">{rfq.timeline}</dd>
+                  <dt className="text-slate-custom text-xs uppercase tracking-wide">Work Timeline</dt>
+                  <dd className="text-text-deep font-medium">{rfq.timeline}</dd>
                 </div>
                 {rfq.budgetRange && (
                   <div>
-                    <dt className="text-gray-500 text-xs uppercase tracking-wide">Budget Range</dt>
-                    <dd className="text-navy dark:text-white font-medium">{rfq.budgetRange}</dd>
+                    <dt className="text-slate-custom text-xs uppercase tracking-wide">Budget Range</dt>
+                    <dd className="text-text-deep font-medium">{rfq.budgetRange}</dd>
                   </div>
                 )}
                 <div>
-                  <dt className="text-gray-500 text-xs uppercase tracking-wide">Posted</dt>
-                  <dd className="text-navy dark:text-white font-medium">
+                  <dt className="text-slate-custom text-xs uppercase tracking-wide">Posted</dt>
+                  <dd className="text-text-deep font-medium">
                     {new Date(rfq.createdAt).toLocaleDateString()}
                   </dd>
                 </div>
@@ -414,7 +426,7 @@ export default function RfqDetailPage() {
             {isOwner && rfq.status === "open" && (
               <button
                 onClick={handleClose}
-                className="w-full text-sm border border-red-200 text-red-600 hover:bg-red-50 py-2 rounded-lg transition-colors dark:border-red-900 dark:hover:bg-red-900/20"
+                className="w-full text-sm border border-danger/30 text-danger hover:bg-danger-surface py-2 rounded-lg transition-colors"
               >
                 Close RFQ
               </button>

@@ -17,6 +17,9 @@ function todayString(): string {
   return new Date().toISOString().split("T")[0];
 }
 
+const timeInputClass =
+  "bg-surface border border-mist rounded-md px-3 py-2 text-sm text-deep focus:outline-none focus:border-primary focus:ring-2 focus:ring-focus-ring/40";
+
 export function TimeSlotPicker({ slots, onChange, maxSlots = 3 }: TimeSlotPickerProps) {
   const addSlot = () => {
     if (slots.length >= maxSlots) return;
@@ -44,26 +47,26 @@ export function TimeSlotPicker({ slots, onChange, maxSlots = 3 }: TimeSlotPicker
               const d = new Date(e.target.value + "T00:00:00");
               updateSlot(i, "date", d.getTime());
             }}
-            className="border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+            className={timeInputClass}
           />
           <input
             type="time"
             value={slot.startTime}
             onChange={(e) => updateSlot(i, "startTime", e.target.value)}
-            className="border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+            className={timeInputClass}
           />
-          <span className="text-gray-400 text-sm">to</span>
+          <span className="text-slate-custom text-sm">to</span>
           <input
             type="time"
             value={slot.endTime}
             onChange={(e) => updateSlot(i, "endTime", e.target.value)}
-            className="border border-cream-dark rounded-lg px-3 py-2 text-sm bg-white dark:bg-navy dark:text-cream focus:outline-none focus:ring-2 focus:ring-green"
+            className={timeInputClass}
           />
           {slots.length > 1 && (
             <button
               type="button"
               onClick={() => removeSlot(i)}
-              className="text-red-400 hover:text-red-600 text-sm p-1"
+              className="text-danger hover:text-danger/80 transition-colors p-1"
               aria-label="Remove slot"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -77,7 +80,7 @@ export function TimeSlotPicker({ slots, onChange, maxSlots = 3 }: TimeSlotPicker
         <button
           type="button"
           onClick={addSlot}
-          className="text-sm text-green hover:underline font-medium"
+          className="text-sm text-accent hover:underline font-medium"
         >
           + Add another time option
         </button>

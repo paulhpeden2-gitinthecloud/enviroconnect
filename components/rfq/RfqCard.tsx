@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Doc } from "@/convex/_generated/dataModel";
 
 function timelineColor(timeline: string) {
-  if (timeline.includes("Urgent")) return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300";
-  if (timeline.includes("1–3")) return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300";
-  return "bg-green/10 text-green";
+  if (timeline.includes("Urgent")) return "bg-danger-surface text-danger";
+  if (timeline.includes("1–3")) return "bg-warning-surface text-warning";
+  return "bg-accent-surface text-accent";
 }
 
 function deadlineText(deadline: number) {
@@ -29,35 +29,35 @@ export function RfqCard({
 
   return (
     <Link href={`/rfq/${rfq._id}`}>
-      <div className="bg-white dark:bg-navy-light border border-cream-dark rounded-xl p-6 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer h-full flex flex-col">
+      <div className="bg-surface border border-mist rounded-lg p-6 shadow-md hover:shadow-lg hover:border-mist-hover transition-all duration-200 cursor-pointer h-full flex flex-col">
         <div className="flex items-start justify-between gap-2 mb-3">
-          <h3 className="text-lg font-semibold text-navy truncate flex-1">
+          <h3 className="text-lg font-semibold text-text-deep truncate flex-1">
             {rfq.title}
           </h3>
           {badge && (
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded shrink-0 ${
               badge === "Invited"
-                ? "bg-navy/10 text-navy dark:bg-white/10 dark:text-white"
-                : "bg-green/10 text-green"
+                ? "bg-cloud text-primary-light border border-mist"
+                : "bg-accent-surface text-accent"
             }`}>
               {badge}
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-500 mb-1">{rfq.serviceArea}</p>
-        <p className="text-sm text-gray-600 mb-4 flex-1">{preview}</p>
+        <p className="text-sm text-slate-custom mb-1">{rfq.serviceArea}</p>
+        <p className="text-sm text-slate-custom mb-4 flex-1">{preview}</p>
         <div className="flex flex-wrap gap-2 mb-3">
           {topServices.map((s) => (
             <span
               key={s}
-              className="text-xs bg-green/10 text-green font-medium px-2.5 py-1 rounded-full"
+              className="bg-cloud text-primary-light border border-mist text-xs rounded px-2 py-0.5"
             >
               {s.split("(")[0].trim()}
             </span>
           ))}
         </div>
-        <div className="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-cream-dark">
-          <span className={`px-2 py-0.5 rounded-full font-medium ${timelineColor(rfq.timeline)}`}>
+        <div className="flex items-center justify-between text-xs text-slate-custom pt-3 border-t border-mist">
+          <span className={`px-2 py-0.5 rounded font-semibold ${timelineColor(rfq.timeline)}`}>
             {rfq.timeline}
           </span>
           <span>{deadlineText(rfq.deadline)}</span>
